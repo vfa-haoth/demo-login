@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as actions from './../../actions/index';
-import { connect } from 'react-redux';
 
 class SignUp extends Component {
 
@@ -15,7 +13,7 @@ class SignUp extends Component {
             tel: '',
             email: '',
             isChecked: false,
-            errors: {}
+            errors: {} 
         }
     }
 
@@ -61,7 +59,7 @@ class SignUp extends Component {
     }
 
     render() {
-        var { username, password, age, tel, email, isChecked, errors } = this.state;
+        var { username, password, age, tel, email, isChecked } = this.state;
         return (
             <div>
                 <div className="panel panel-success">
@@ -70,7 +68,7 @@ class SignUp extends Component {
                     </div>
                     <div className="panel-body">
                         <form onSubmit={this.onSubmit}>
-                            <label>Username:</label>
+                            <label>Username</label>
                             <div className="form-group">
                                 <input
                                     type="text"
@@ -79,16 +77,9 @@ class SignUp extends Component {
                                     placeholder="Insert username"
                                     value={username}
                                     onChange={this.onChange} />
-                                    {errors.username && (
-                                        <div
-                                            className='invalid-feedback'
-                                        >
-                                            {errors.username}
-                                        </div>
-                                    )}
                             </div>
                             <br />
-                            <label>Password:</label>
+                            <label>Password</label>
                             <div className="form-group">
                                 <input
                                     type="password"
@@ -97,16 +88,9 @@ class SignUp extends Component {
                                     placeholder="Insert password"
                                     value={password}
                                     onChange={this.onChange} />
-                                    {errors.password && (
-                                        <div
-                                            className='invalid-feedback'
-                                        >
-                                            {errors.password}
-                                        </div>
-                                    )}
                             </div>
                             <br />
-                            <label>Confirm password:</label>
+                            <label>Confirm password</label>
                             <div className="form-group">
                                 <input
                                     type="password"
@@ -115,16 +99,9 @@ class SignUp extends Component {
                                     placeholder="Confirm password"
                                     value={password}
                                     onChange={this.onChange} />
-                                    {errors.password && (
-                                        <div
-                                            className='invalid-feedback'
-                                        >
-                                            {errors.password}
-                                        </div>
-                                    )}
                             </div>
                             <br />
-                            <label>Age:</label>
+                            <label>Age</label>
                             <div className="form-group">
                                 <input
                                     type="number"
@@ -135,16 +112,9 @@ class SignUp extends Component {
                                     max={"100"}
                                     value={age}
                                     onChange={this.onChange} />
-                                    {errors.age && (
-                                        <div
-                                            className='invalid-feedback'
-                                        >
-                                            {errors.age}
-                                        </div>
-                                    )}
                             </div>
                             <br />
-                            <label>Tel:</label>
+                            <label>Tel</label>
                             <div className="form-group">
                                 <input
                                     type="tel"
@@ -153,16 +123,9 @@ class SignUp extends Component {
                                     placeholder="Input telephone number"
                                     value={tel}
                                     onChange={this.onChange} />
-                                    {errors.tel && (
-                                        <div
-                                            className='invalid-feedback'
-                                        >
-                                            {errors.tel}
-                                        </div>
-                                    )}
                             </div>
                             <br />
-                            <label>Email:</label>
+                            <label>Email</label>
                             <div className="form-group">
                                 <input
                                     type="email"
@@ -171,13 +134,6 @@ class SignUp extends Component {
                                     placeholder="Input email address"
                                     value={email}
                                     onChange={this.onChange} />
-                                    {errors.email && (
-                                        <div
-                                            className='invalid-feedback'
-                                        >
-                                            {errors.email}
-                                        </div>
-                                    )}
                             </div>
                             <br />
                             <div className="checkbox">
@@ -224,19 +180,4 @@ class SignUp extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        account : state.account,
-        errors : state.errors
-    }
-}
-
-const mapDipatchToProps = (dispatch, props) => {
-    return {
-        onSubmit: (account) => {
-            dispatch(actions.signUp(account));
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDipatchToProps)(SignUp);
+export default SignUp;

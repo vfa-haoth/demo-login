@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import * as actions from './../../actions/index';
-import { connect } from 'react-redux';
-import classnames from 'classnames';
 
 class SignIn extends Component {
 
@@ -47,7 +44,7 @@ class SignIn extends Component {
   }
 
   render() {
-    var { username, password, errors } = this.state;
+    var { username, password } = this.state;
     return (
       <div>
         <div className="panel panel-primary">
@@ -57,24 +54,20 @@ class SignIn extends Component {
           <div className="panel-body">
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
-                <label>Username: </label><br />
+                <label>Username </label><br />
                 <input
                   type="text"
                   name="username"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.username
-                  })}
+                  className='form-control form-control-lg'
                   placeholder="Input username"
                   onChange={this.onChange}
                   value={username} />
                 <br />
-                <label>Password: </label><br />
+                <label>Password </label><br />
                 <input
                   type="password"
                   name="password"
-                  className={classnames('form-control form-control-lg', {
-                    'is-invalid': errors.password
-                  })}
+                  className='form-control form-control-lg'
                   placeholder="Input password"
                   onChange={this.onChange}
                   value={password} />
@@ -106,18 +99,4 @@ class SignIn extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    errors : state.errors
-  }
-}
-
-const mapDipatchToProps = (dispatch, props) => {
-  return {
-    onSubmit: (username, password) => {
-      dispatch(actions.signIn(username, password));
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDipatchToProps)(SignIn);
+export default SignIn;
