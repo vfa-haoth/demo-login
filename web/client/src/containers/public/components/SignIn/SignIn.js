@@ -1,28 +1,63 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import APIAuthenticateControllers from './../../../../controllers/API/authenticate';
+import BaseControllers from '../../../../controllers/Base';
 
 class SignIn extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
+      isSigningIn: false,
+      signInData: {
+        username: '',
+        password: ''
+      },
       errors: {}
     }
+
+    this.baseCtrl = new BaseControllers();
+    this.apiCtrl = new APIAuthenticateControllers();
+    this.onSubmit = this.onSubmit.bind(this);
+
+    if ( this.apiCtrl.verifySignIn().success) {
+      this.props.history.push("/");
+    }
+  }
+
+  showSignInButton = () => {
+    this.setState({isSigningIn : (this.state.isSigningIn ? false : true)})
   }
 
   onClick = () => {
     this.props.history.push("/");
   }
 
-  onSubmit = (event) => {
+  async onSubmit (event) {
     event.preventDefault();
-    var user = {
-      username: this.state.username,
-      password: this.state.password
+
+    const {signInData} = this.state;
+    var error = '';
+
+    if (!signInData.username || !signInData.password) {
+      error = 'Wrong username or password!';
     }
-    this.props.onSubmit(user.username, user.password);
+
+    if (!error) {
+      var signIn = this.apiCtrl.signIn(signInData);
+      await signIn.then( (val) => {
+        if ( val.success ) {
+          window.location = "/";
+          return true;
+        } else {
+          error = "Sign in failed!"
+        }
+      })
+    }
+
+    this.setState({
+      error : error
+    })
   }
 
   componentWillReceiveProps(nextProps) {
