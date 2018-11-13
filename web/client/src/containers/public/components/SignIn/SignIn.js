@@ -20,43 +20,39 @@ class SignIn extends Component {
     this.apiCtrl = new APIAuthenticateControllers();
     this.onSubmit = this.onSubmit.bind(this);
 
-    if ( this.apiCtrl.verifySignIn().success) {
+    if (this.apiCtrl.verifySignIn().success) {
       this.props.history.push("/");
     }
-  }
-
-  showSignInButton = () => {
-    this.setState({isSigningIn : (this.state.isSigningIn ? false : true)})
   }
 
   onClick = () => {
     this.props.history.push("/");
   }
 
-  async onSubmit (event) {
+  async onSubmit(event) {
     event.preventDefault();
 
-    const {signInData} = this.state;
-    var error = '';
+    const { signInData } = this.state;
+    var errors = '';
 
     if (!signInData.username || !signInData.password) {
-      error = 'Wrong username or password!';
+      errors = 'Wrong username or password!';
     }
 
-    if (!error) {
+    if (!errors) {
       var signIn = this.apiCtrl.signIn(signInData);
-      await signIn.then( (val) => {
-        if ( val.success ) {
+      await signIn.then((val) => {
+        if (val.success) {
           window.location = "/";
           return true;
         } else {
-          error = "Sign in failed!"
+          errors = "Sign in failed!"
         }
       })
     }
 
     this.setState({
-      error : error
+      errors: errors
     })
   }
 
@@ -69,17 +65,33 @@ class SignIn extends Component {
   }
 
   onChange = (event) => {
-    var target = event.target;
-    var name = target.name;
-    var value = target.value;
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+
+    let signInData = this.state.signInData;
+    signInData[name] = value;
 
     this.setState({
-      [name]: value
+      signInData: signInData
     })
   }
 
+  // checkMessage = () => {
+  //   var msg = '';
+  //   if (this.state.errors) {
+  //     msg = () => {
+  //       return (
+  //         <p className="errors">{this.state.errors}</p>
+  //       )
+  //     }
+  //   }
+  //   return msg;
+  // }
+
   render() {
-    var { username, password } = this.state;
+    var { username, password } = this.state.signInData;
+    
     return (
       <div>
         <div className="panel panel-primary">
@@ -88,6 +100,7 @@ class SignIn extends Component {
           </div>
           <div className="panel-body">
             <form onSubmit={this.onSubmit}>
+              {/* {this.checkMessage} */}
               <div className="form-group">
                 <label>Username </label><br />
                 <input

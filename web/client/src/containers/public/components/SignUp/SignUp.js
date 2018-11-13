@@ -1,65 +1,102 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import APIAuthenticateControllers from './../../../../controllers/API/authenticate';
+import BaseControllers from '../../../../controllers/Base';
 
 class SignUp extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
-            confirmPassword: '',
-            age: '',
-            tel: '',
-            email: '',
+            signUpData: {
+                username: '',
+                password: '',
+                confirmPassword: '',
+                age: '',
+                tel: '',
+                email: '',
+            },
             isChecked: false,
-            errors: {} 
+            errors: {}
         }
-    }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps) {
-            this.setState({
-                code: nextProps.code,
-                name: nextProps.name,
-                price: nextProps.price,
-                status: nextProps.status,
-                errors: nextProps.errors
-            })
-        }
+        this.baseCtrl = new BaseControllers();
+        this.apiCtrl = new APIAuthenticateControllers();
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onClick = () => {
         this.props.history.push("/sign-in");
     }
 
-    onSubmit = (event) => {
+    async onSubmit(event) {
         event.preventDefault();
-        var { username, password, age, tel, email, isChecked } = this.state;
-        var account = {
-            username: username,
-            password: password,
-            age: age,
-            tel: tel,
-            email: email,
-            isChecked: isChecked
+        var { username, password, confirmPassword, age, tel, email } = this.state.signUpData;
+        var errors = '';
+
+        if (username) {
+            errors = 'Username already exist';
         }
 
-        this.props.onSubmit(account, this.props.history);
+        if (confirmPassword !== password) {
+            errors = 'Password is different';
+        }
+
+        if (age < 13) {
+            errors = 'You must older than 12';
+        }
+
+        if (email) {
+            errors = 'Email already exist';
+        }
+
+        if (tel) {
+            errors = 'Telephone number already exist';
+        }
+
+        if (!errors) {
+            var signUp = this.apiCtrl.signUp(this.state.signUpData);
+            await signUp.then((val) => {
+                if (val.success) {
+                    window.location = "/sign-in";
+                    return true;
+                } else {
+                    errors = "Sign up failed!";
+                }
+            })
+        }
+        this.setState({
+            errors: errors
+        })
     }
 
     onChange = (event) => {
-        var target = event.target;
-        var name = target.name;
-        var value = target.type === 'checkbox' ? target.checked : target.value;
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+
+        let signUpData = this.state.signUpData;
+        signUpData[name] = value;
 
         this.setState({
-            [name]: value
+            signUpData: signUpData
+        })
+    }
+
+    onChangeCheckbox = (event) => {
+        const target = event.target;
+        const name = target.name;
+        const value = target.checked;
+
+        this.setState({
+            [name] : value
         })
     }
 
     render() {
-        var { username, password, age, tel, email, isChecked } = this.state;
+        var { username, password, confirmPassword, age, tel, email } = this.state.signUpData;
+        var { isChecked } = this.state;
+        console.log(isChecked)
         return (
             <div>
                 <div className="panel panel-success">
@@ -97,7 +134,7 @@ class SignUp extends Component {
                                     name="confirmPassword"
                                     className="form-control"
                                     placeholder="Confirm password"
-                                    value={password}
+                                    value={confirmPassword}
                                     onChange={this.onChange} />
                             </div>
                             <br />
@@ -142,7 +179,7 @@ class SignUp extends Component {
                                         type="checkbox"
                                         name="isChecked"
                                         value={isChecked}
-                                        onChange={this.onChange} />
+                                        onChange={this.onChangeCheckbox} />
                                     By checking this box, you will also agree with our
                                     &nbsp;
                                         <Link to={"/terms-of-use"}>
