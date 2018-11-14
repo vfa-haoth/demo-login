@@ -4,7 +4,10 @@ export default class BaseControllers {
         let result = false;
 
         switch(fieldName){
-            case 'username' || 'password' :
+            case 'username' :
+                result = (value.length >= 6 ? true : false)
+                break;
+            case 'password' :
                 result = (value.length >= 6 ? true : false)
                 break;
             case 'tel' : 

@@ -6,7 +6,7 @@ export default class APIControllers {
         this.graphQLController = new GraphQLControllers();
     }
 
-    getListOfUsersData (params = null) {
+    getListOfUsersData(params = null) {
         var app_query = gql`
             query {
                 usersList {
@@ -21,42 +21,44 @@ export default class APIControllers {
 
         var result = this.graphQLController.query(app_query);
 
-        return result.then( (val) => {
-            if ( val.success ) {
-                return {success : true, data : val.data.usersList}
+        return result.then((val) => {
+            if (val.success) {
+                return { success: true, data: val.data.usersList }
             }
-            return {success : false}
+            return { success: false }
         })
     }
 
-    saveUser ( params ) {
-        var app_query = gql `
+    saveUser(params) {
+        var app_query = gql`
             mutation {
-                userSave {
+                addUser (
                     username : "${params.username}",
                     password : "${params.password}",
-                    age : "${params.age || 0}",
+                    age : "${params.age || ''}",
                     tel : "${params.tel || ''}",
                     email : "${params.email}"
-                }
-            }{
+                ){
                 username
+                }
             }
         `
 
         var result = this.graphQLController.mutate(app_query);
 
-        return result.then( (val) => {
-            if ( val.success ) {
-                return { success : true }
+        return result.then((val) => {
+            if (val.success) {
+                if(val.data.addUser){
+                    return { success: true, data: val.data.addUser }
+                }
             }
-            return { success : false }
+            return { success: false }
         })
     }
 
-    getUserData (params = null) {
+    getUserData(params = null) {
         let userData = JSON.parse(localStorage.getItem('userData'))
-        let userID = 0;
+        let userID = '';
 
         if (userData) {
             userID = userData._id;
@@ -67,28 +69,24 @@ export default class APIControllers {
         }
 
         if (userID === 0) {
-            return {success : false}
+            return { success: false }
         }
 
-        var app_query = gql `
+        var app_query = gql`
             query {
-                userData (_id : "${userID}") {
-                    _id
+                userDetail (_id : "${userID}") {
                     username
-                    age
-                    tel
-                    email
                 }
             }
         `
 
         var result = this.graphQLController.query(app_query)
 
-        return result.then( (val) => {
-            if ( val.success ) {
-                return {success : true, data : val.data.userData}
+        return result.then((val) => {
+            if (val.success) {
+                return { success: true, data: val.data.userDetail }
             }
-            return {success : false}
+            return { success: false }
         })
     }
 }

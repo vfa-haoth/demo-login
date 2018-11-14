@@ -19,17 +19,13 @@ class SignIn extends Component {
     this.baseCtrl = new BaseControllers();
     this.apiCtrl = new APIAuthenticateControllers();
     this.onSubmit = this.onSubmit.bind(this);
-
-    if (this.apiCtrl.verifySignIn().success) {
-      this.props.history.push("/");
-    }
   }
 
   onClick = () => {
     this.props.history.push("/");
   }
 
-  async onSubmit(event) {
+  onSubmit(event) {
     event.preventDefault();
 
     const { signInData } = this.state;
@@ -41,9 +37,10 @@ class SignIn extends Component {
 
     if (!errors) {
       var signIn = this.apiCtrl.signIn(signInData);
-      await signIn.then((val) => {
+
+      signIn.then((val) => {
         if (val.success) {
-          window.location = "/";
+          this.props.history.push('/');
           return true;
         } else {
           errors = "Sign in failed!"
@@ -54,14 +51,6 @@ class SignIn extends Component {
     this.setState({
       errors: errors
     })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({
-        errors: nextProps.errors
-      })
-    }
   }
 
   onChange = (event) => {
@@ -77,18 +66,6 @@ class SignIn extends Component {
     })
   }
 
-  // checkMessage = () => {
-  //   var msg = '';
-  //   if (this.state.errors) {
-  //     msg = () => {
-  //       return (
-  //         <p className="errors">{this.state.errors}</p>
-  //       )
-  //     }
-  //   }
-  //   return msg;
-  // }
-
   render() {
     var { username, password } = this.state.signInData;
     
@@ -99,8 +76,7 @@ class SignIn extends Component {
             <h2 className="panel-title">Sign in</h2>
           </div>
           <div className="panel-body">
-            <form onSubmit={this.onSubmit}>
-              {/* {this.checkMessage} */}
+            <form onSubmit={(event) => this.onSubmit(event)}>
               <div className="form-group">
                 <label>Username </label><br />
                 <input
@@ -128,7 +104,7 @@ class SignIn extends Component {
                 </p>
                 <br />
                 <div>
-                  <button type="submit" className="btn btn-primary">Submit</button>
+                  <button type="submit" onClick={this.onSubmit} className="btn btn-primary">Submit</button>
                   &nbsp;
                   <button
                     type="button"

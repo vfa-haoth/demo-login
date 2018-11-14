@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import APIAuthenticateControllers from './../../../../controllers/API/authenticate';
+import APIControllers from './../../../../controllers/API/index';
 import BaseControllers from '../../../../controllers/Base';
 
 class SignUp extends Component {
@@ -11,7 +12,6 @@ class SignUp extends Component {
             signUpData: {
                 username: '',
                 password: '',
-                confirmPassword: '',
                 age: '',
                 tel: '',
                 email: '',
@@ -21,7 +21,7 @@ class SignUp extends Component {
         }
 
         this.baseCtrl = new BaseControllers();
-        this.apiCtrl = new APIAuthenticateControllers();
+        this.apiCtrl = new APIControllers();
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -31,31 +31,17 @@ class SignUp extends Component {
 
     async onSubmit(event) {
         event.preventDefault();
-        var { username, password, confirmPassword, age, tel, email } = this.state.signUpData;
+        console.log("clicked")
+        var { signUpData } = this.state;
         var errors = '';
 
-        if (username) {
-            errors = 'Username already exist';
+        if(!signUpData.username || !signUpData.password || !signUpData.email){
+            errors = "Username, password and email is required!"
         }
 
-        if (confirmPassword !== password) {
-            errors = 'Password is different';
-        }
-
-        if (age < 13) {
-            errors = 'You must older than 12';
-        }
-
-        if (email) {
-            errors = 'Email already exist';
-        }
-
-        if (tel) {
-            errors = 'Telephone number already exist';
-        }
-
+        console.log(errors)
         if (!errors) {
-            var signUp = this.apiCtrl.signUp(this.state.signUpData);
+            var signUp = this.apiCtrl.saveUser(this.state.signUpData);
             await signUp.then((val) => {
                 if (val.success) {
                     window.location = "/sign-in";
@@ -73,7 +59,7 @@ class SignUp extends Component {
     onChange = (event) => {
         const target = event.target;
         const name = target.name;
-        const value = target.value;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
 
         let signUpData = this.state.signUpData;
         signUpData[name] = value;
@@ -83,20 +69,9 @@ class SignUp extends Component {
         })
     }
 
-    onChangeCheckbox = (event) => {
-        const target = event.target;
-        const name = target.name;
-        const value = target.checked;
-
-        this.setState({
-            [name] : value
-        })
-    }
-
     render() {
-        var { username, password, confirmPassword, age, tel, email } = this.state.signUpData;
+        var { username, password,  age, tel, email } = this.state.signUpData;
         var { isChecked } = this.state;
-        console.log(isChecked)
         return (
             <div>
                 <div className="panel panel-success">
@@ -127,7 +102,7 @@ class SignUp extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <br />
-                            <label>Confirm password</label>
+                            {/* <label>Confirm password</label>
                             <div className="form-group">
                                 <input
                                     type="password"
@@ -137,11 +112,11 @@ class SignUp extends Component {
                                     value={confirmPassword}
                                     onChange={this.onChange} />
                             </div>
-                            <br />
+                            <br /> */}
                             <label>Age</label>
                             <div className="form-group">
                                 <input
-                                    type="number"
+                                    type="text"
                                     name="age"
                                     className="form-control"
                                     placeholder="Insert your age"
@@ -154,7 +129,7 @@ class SignUp extends Component {
                             <label>Tel</label>
                             <div className="form-group">
                                 <input
-                                    type="tel"
+                                    type="text"
                                     name="tel"
                                     className="form-control"
                                     placeholder="Input telephone number"
@@ -165,7 +140,7 @@ class SignUp extends Component {
                             <label>Email</label>
                             <div className="form-group">
                                 <input
-                                    type="email"
+                                    type="text"
                                     name="email"
                                     className="form-control"
                                     placeholder="Input email address"
@@ -179,7 +154,7 @@ class SignUp extends Component {
                                         type="checkbox"
                                         name="isChecked"
                                         value={isChecked}
-                                        onChange={this.onChangeCheckbox} />
+                                        onChange={this.onChange} />
                                     By checking this box, you will also agree with our
                                     &nbsp;
                                         <Link to={"/terms-of-use"}>
@@ -197,7 +172,6 @@ class SignUp extends Component {
                                 type="submit"
                                 className="btn btn-primary"
                                 onClick={this.onSubmit}
-                                disabled={isChecked ? false : true}
                             >
                                 Submit
                             </button>

@@ -13,11 +13,11 @@ var userSchema = new Schema({
         require : true
     },
     age : {
-        type : Number,
+        type : String,
         require : false
     },
     tel : {
-        type : Number,
+        type : String,
         require : true
     },
     email : {
@@ -47,6 +47,6 @@ userSchema.pre('save', function(next) {
     })
 })
 
-var User = mongoose.model('user', userSchema);
+var UserModel = mongoose.model('user', userSchema);
 
-module.exports = User;
+module.exports = UserModel;

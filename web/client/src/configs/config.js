@@ -1,6 +1,6 @@
 module.exports = {
     development : {
-        db : 'mongodb://localhost/login',
+        db : 'mongodb://localhost:27017/login',
         app : {
             name : 'login'
         }

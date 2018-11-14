@@ -3,17 +3,16 @@ import GraphQLController from './../graphql';
 
 export default class APIAuthenticateControllers {
     constructor() {
-        this.graphQlController = new GraphQLController();
+        this.graphQLController = new GraphQLController();
     }
 
     async signIn(params) {
         var app_query = gql`
             mutation {
-                memberSignIn ( 
+                userSignin ( 
                     username : "${params.username}",
                     password : "${params.password}"
                 ) {
-                    _id
                     username
                     age
                     tel
@@ -23,14 +22,17 @@ export default class APIAuthenticateControllers {
             }
         `
 
-        var result = this.graphQlController.mutate(app_query);
-
+        var result = this.graphQLController.mutate(app_query);
+        
         return result.then((val) => {
             if (val.success) {
-                if (val.data.memberSignIn) {
-                    localStorage.setItem('userData', JSON.stringify(val.data.memberSignIn))
-                    return { success: true, data: val.data.memberSignIn }
+                if (val.data.userSignin) {
+                    localStorage.setItem('userData', JSON.stringify(val.data.userSignin))
+                    console.log("sign in success")
+                    return { success: true, data: val.data.userSignin }
                 }
+            }else {
+                console.log("failed")
             }
             return { success: false }
         })
@@ -43,7 +45,7 @@ export default class APIAuthenticateControllers {
 
         if ( userData != null ) {
             token = userData.token;
-            data = {success : true, memberInfo : {
+            data = {success : true, userInfo : {
                 _id : userData._id,
                 username : userData.username,
                 age : userData.age,
