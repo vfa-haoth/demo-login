@@ -1,4 +1,4 @@
-var { GraphQLNonNull, GraphQLString} = require('graphql');
+var { GraphQLNonNull, GraphQLID} = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
 
@@ -6,7 +6,7 @@ exports.remove = {
     type : UserType.userType,
     args: {
         id : {
-            type: new GraphQLNonNull(GraphQLString)
+            type: new GraphQLNonNull(GraphQLID)
         }
     },
     resolve(root, params) {
@@ -16,6 +16,6 @@ exports.remove = {
             throw new Error('Error')
         }
 
-        return remove
+        return removeUser;
     }
 }

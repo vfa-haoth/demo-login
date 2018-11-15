@@ -26,7 +26,7 @@ exports.update = {
         },
         tel: {
             type: GraphQLString,
-            required: true
+            required: false
         },
         email: {
             type: GraphQLString,

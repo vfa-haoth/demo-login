@@ -29,7 +29,7 @@ export default class APIControllers {
         })
     }
 
-    saveUser(params) {
+    async saveUser(params) {
         var app_query = gql`
             mutation {
                 addUser (
@@ -38,7 +38,7 @@ export default class APIControllers {
                     age : "${params.age || ''}",
                     tel : "${params.tel || ''}",
                     email : "${params.email}"
-                ){
+                ) {
                 username
                 }
             }
@@ -48,9 +48,9 @@ export default class APIControllers {
 
         return result.then((val) => {
             if (val.success) {
-                if(val.data.addUser){
-                    return { success: true, data: val.data.addUser }
-                }
+                return { success: true }
+            }else {
+                console.log("failed")
             }
             return { success: false }
         })
@@ -75,7 +75,11 @@ export default class APIControllers {
         var app_query = gql`
             query {
                 userDetail (_id : "${userID}") {
+                    _id
                     username
+                    age
+                    tel
+                    email
                 }
             }
         `
@@ -84,7 +88,9 @@ export default class APIControllers {
 
         return result.then((val) => {
             if (val.success) {
-                return { success: true, data: val.data.userDetail }
+                if (val.data.userDetail) {
+                    return { success: true, data: val.data.userDetail }
+                }
             }
             return { success: false }
         })

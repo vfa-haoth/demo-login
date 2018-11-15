@@ -14,13 +14,13 @@ app.use(cors());
 
 app.use('/graphql', jwt({
     secret: 'process.env.JWT_SECRET_KEY',
-    requestProperty: 'auth',
+    requestProperty: 'authenticate',
     credentialsRequired: false
 }))
 
 app.use('/graphql', (req, res, done) => {
     console.log('graphql on');
-    var userID = (req.auth && req.auth.id) ? req.auth.id : undefined;
+    var userID = (req.authenticate && req.authenticate.id) ? req.authenticate.id : undefined;
     console.log(userID);
     const user = (userID) ? User.findById(userID) : undefined;
     req.context = {

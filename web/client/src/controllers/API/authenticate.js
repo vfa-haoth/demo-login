@@ -13,6 +13,7 @@ export default class APIAuthenticateControllers {
                     username : "${params.username}",
                     password : "${params.password}"
                 ) {
+                    _id
                     username
                     age
                     tel

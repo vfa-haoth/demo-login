@@ -11,15 +11,12 @@ const root = new GraphQLObjectType({
             resolve : function() {
                 const users = UserModel.find().exec();
                 const count = UserModel.countDocuments().exec();
-
-                count.then( (data) => {
-                    console.log(data);
+                count.then(data => {
+                    console.log(data)
                 })
-
                 console.log(JSON.stringify(users));
-
                 if(!users) {
-                    throw new Error('Error')
+                     throw new Error('Error')
                 }
 
                 return users;

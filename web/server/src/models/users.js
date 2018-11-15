@@ -6,24 +6,86 @@ var userSchema = new Schema({
     username : {
         type : String,
         unique : true,
-        require : true
+        required : true
     },
     password : {
         type : String,
-        require : true
+        required : true
     },
     age : {
         type : String,
-        require : false
+        required : false
     },
     tel : {
         type : String,
-        require : true
+        required : true
     },
     email : {
         type : String,
-        require : true
-    }
+        required : true
+    },
+    addresses : [
+        {
+            house : [
+                {
+                    code : {
+                        type : String,
+                        required : true
+                    },
+                    street : {
+                        type : String,
+                        required : true
+                    },
+                    ward : {
+                        type : String,
+                        required : true
+                    },
+                    district : {
+                        type : String,
+                        required : true
+                    },
+                    city : {
+                        type : String,
+                        required : true
+                    }
+                }
+            ]
+        },
+        {
+            apartment : [
+                {
+                    floor : {
+                        type : String,
+                        required : true
+                    },
+                    room : {
+                        type : String,
+                        required : true
+                    },
+                    code : {
+                        type : String,
+                        required : true
+                    },
+                    street : {
+                        type : String,
+                        required : true
+                    },
+                    ward : {
+                        type : String,
+                        required : true
+                    },
+                    district : {
+                        type : String,
+                        required : true
+                    },
+                    city : {
+                        type : String,
+                        required : true
+                    }
+                }
+            ]
+        }
+    ]
 })
 
 userSchema.pre('save', function(next) {

@@ -1,6 +1,7 @@
 var env = process.env.NODE_ENV || 'development',
     config = require('./config')[env],
     mongoose = require('mongoose');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function () {
     mongoose.Promise = global.Promise;
@@ -10,6 +11,8 @@ module.exports = function () {
     }).on('open', function () {
         console.log('Connection extablised with MongoDB')
     })
-    
+    ObjectId.prototype.valueOf = function () {
+        return this.toString();
+    };
     return db;
 }

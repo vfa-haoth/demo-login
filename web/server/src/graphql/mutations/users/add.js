@@ -6,11 +6,11 @@ exports.add = {
     type : UserType.userType,
     args : {
         username : {
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
             required: true
         },
         password : {
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
             required: true
         },
         age : {
@@ -22,7 +22,7 @@ exports.add = {
             required : true
         },
         email : {
-            type : new GraphQLNonNull(GraphQLString),
+            type : GraphQLString,
             required : true
         }
     },

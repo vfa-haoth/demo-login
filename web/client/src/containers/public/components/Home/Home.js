@@ -6,35 +6,44 @@ class Home extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            username : '',
-            isSignedin : false
+            userProfile : {
+                username: '',
+                age: '',
+                tel: '',
+                email: '',
+                addresses: {}
+            }
         }
 
         this.apiCtrl = new APIControllers();
     }
 
-    checkSignedIn = async() => {
-        var result = await this.apiCtrl.getUserData()
-        console.log(result)
-        if(result.success){
+    showAddresses = () => {
+        var result = this.apiCtrl.getUserData();
+        if(result.success) {
             this.setState({
-                isSignedin : true,
-                username : result.data
-            })
-        }else{
-            this.setState({
-                isSignedin : false,
-                username : ''
+                username : result.data[0].username,
+                password : result.data[0].password,
+                age : result.data[0].age,
+                tel : result.data[0].tel,
+                email : result.data[0].email,
+                addresses : result.data[0].addresses
             })
         }
-    } 
-
-    componentDidMount(){
-        this.checkSignedIn();
     }
 
-    onClick = () => {
+    connect = () => {
         this.props.history.push("/sign-in");
+    }
+
+    signOut = () => {
+        this.apiAuthCtrl.signOut();
+    }
+
+    toggle = () => {
+        this.setState({
+            ddOpen: !this.state.ddOpen
+        })
     }
 
     render() {
@@ -45,7 +54,7 @@ class Home extends Component {
                     <button
                         type="button"
                         className="btn btn-warning"
-                        onClick={this.onClick}
+                        onClick={this.connect}
                     >
                         Connect >>
                 </button>
@@ -55,10 +64,25 @@ class Home extends Component {
             return (
                 <React.Fragment>
                     <div className="row">
-                        <p>Hello<br /><h2>{username}</h2></p>
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h2> Hi <strong><span>{username}</span></strong>, let's check your profile shall we?</h2>
+                            <button
+                                type="button"
+                                class="btn btn-success"
+                                onClick={this.showProfile}
+                            >
+                                Profile
+                            </button>
+                        </div>
                     </div>
-                    <div className="row">
-                        <button type="button" className="btn btn-large btn-block btn-danger">Sign out</button>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{username}'s profile</h3>
+                        </div>
+                        <div class="panel-body">
+                            {this.showAddresses}
+                        </div>
                     </div>
                 </React.Fragment>
             )

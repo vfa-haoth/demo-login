@@ -29,7 +29,7 @@ class SignUp extends Component {
         this.props.history.push("/sign-in");
     }
 
-    async onSubmit(event) {
+    onSubmit(event) {
         event.preventDefault();
         console.log("clicked")
         var { signUpData } = this.state;
@@ -42,9 +42,9 @@ class SignUp extends Component {
         console.log(errors)
         if (!errors) {
             var signUp = this.apiCtrl.saveUser(this.state.signUpData);
-            await signUp.then((val) => {
+            signUp.then((val) => {
                 if (val.success) {
-                    window.location = "/sign-in";
+                    this.props.history.push("/sign-in");
                     return true;
                 } else {
                     errors = "Sign up failed!";
@@ -79,7 +79,7 @@ class SignUp extends Component {
                         <h2 className="panel-title">Sign up</h2>
                     </div>
                     <div className="panel-body">
-                        <form onSubmit={this.onSubmit}>
+                        <form onSubmit={(event) => this.onSubmit(event)}>
                             <label>Username</label>
                             <div className="form-group">
                                 <input
