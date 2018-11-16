@@ -56,6 +56,34 @@ export default class APIControllers {
         })
     }
 
+    async updateUser(params) {
+        var app_query = gql`
+            mutation {
+                updateUser (
+                    username : "${params.username}",
+                    password : "${params.password}",
+                    age : "${params.age || ''}",
+                    tel : "${params.tel || ''}",
+                    email : "${params.email}",
+                    address : "${params.address}"
+                ) {
+                username
+                }
+            }
+        `
+
+        var result = this.graphQLController.mutate(app_query);
+
+        return result.then((val) => {
+            if (val.success) {
+                return { success: true }
+            }else {
+                console.log("failed")
+            }
+            return { success: false }
+        })
+    }
+
     getUserData(params = null) {
         let userData = JSON.parse(localStorage.getItem('userData'))
         let userID = '';

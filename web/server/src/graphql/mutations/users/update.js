@@ -1,6 +1,7 @@
-var { GraphQLNonNull, GraphQLString } = require('graphql');
+var { GraphQLNonNull, GraphQLString, GraphQLList } = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
+var AddressType = require('./../../types/address');
 
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -31,6 +32,10 @@ exports.update = {
         email: {
             type: GraphQLString,
             required: true
+        },
+        addresses : {
+            type: GraphQLString,
+            required : false
         }
     },
     resolve(root, params) {

@@ -9,6 +9,10 @@ class HomePage extends Component {
         super(props)
         this.state = {
             username: '',
+            age: '',
+            tel: '',
+            email: '',
+            address: '',
             isSignedin: false
         }
 
@@ -21,7 +25,11 @@ class HomePage extends Component {
         if (result.success) {
             this.setState({
                 isSignedin: true,
-                username: result.data[0].username
+                username: result.data[0].username,
+                age: result.data[0].age,
+                tel: result.data[0].tel,
+                email: result.data[0].email,
+                address: result.data[0].address,
             })
         } else {
             this.setState({
@@ -31,8 +39,22 @@ class HomePage extends Component {
         }
     }
 
+    // async getUserDetail(){
+    //     const result = await this.apiCtrl.getUserData();
+    //     if(result.success){
+    //         this.setState({
+    //             username : result.username,
+    //             age : result.age,
+    //             tel : result.tel,
+    //             email : result.email,
+    //             address : result.address
+    //         })
+    //     }
+    // }
+
     componentDidMount() {
         this.checkSignedIn();
+        // this.getUserDetail();
     }
 
     render() {
@@ -44,7 +66,6 @@ class HomePage extends Component {
                         <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                             <Home
                                 history={this.props.history}
-                                username={this.state.username}
                                 isSignedin={this.state.isSignedin}
                             />
                         </div>
@@ -54,11 +75,15 @@ class HomePage extends Component {
             );
         } else {
             return (
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div className="row">
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <Home
                             history={this.props.history}
                             username={this.state.username}
+                            age={this.state.age}
+                            tel={this.state.tel}
+                            email={this.state.email}
+                            address={this.state.address}
                             isSignedin={this.state.isSignedin}
                         />
                     </div>

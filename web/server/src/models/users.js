@@ -24,66 +24,11 @@ var userSchema = new Schema({
         type : String,
         required : true
     },
-    addresses : [
+    adđress : [
         {
-            house : [
-                {
-                    code : {
-                        type : String,
-                        required : true
-                    },
-                    street : {
-                        type : String,
-                        required : true
-                    },
-                    ward : {
-                        type : String,
-                        required : true
-                    },
-                    district : {
-                        type : String,
-                        required : true
-                    },
-                    city : {
-                        type : String,
-                        required : true
-                    }
-                }
-            ]
-        },
-        {
-            apartment : [
-                {
-                    floor : {
-                        type : String,
-                        required : true
-                    },
-                    room : {
-                        type : String,
-                        required : true
-                    },
-                    code : {
-                        type : String,
-                        required : true
-                    },
-                    street : {
-                        type : String,
-                        required : true
-                    },
-                    ward : {
-                        type : String,
-                        required : true
-                    },
-                    district : {
-                        type : String,
-                        required : true
-                    },
-                    city : {
-                        type : String,
-                        required : true
-                    }
-                }
-            ]
+            type : Schema.Types.ObjectId,
+            ref : 'addresses',
+            required : false
         }
     ]
 })
