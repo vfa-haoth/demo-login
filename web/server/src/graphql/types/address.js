@@ -4,12 +4,13 @@ exports.addressType = new GraphQLObjectType({
     name: 'Address',
     fields: function () {
         return {
-            _id: { type: GraphQLID },
+            _id:{type: new GraphQLNonNull(GraphQLID)},
             code: { type: GraphQLString },
             street: { type: GraphQLString },
             ward: { type: GraphQLString },
             district : { type: GraphQLString },
-            city : {type : GraphQLString}
+            city : {type : GraphQLString},
+            userID: {type : GraphQLString}
         }
     }
 })

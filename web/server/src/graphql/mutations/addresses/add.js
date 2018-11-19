@@ -24,6 +24,10 @@ exports.add = {
         city: {
             type: GraphQLString,
             required: true
+        },
+        userID: {
+            type: GraphQLString,
+            required : true
         }
     },
     resolve(root, params) {

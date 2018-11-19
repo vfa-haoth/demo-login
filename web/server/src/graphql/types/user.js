@@ -12,7 +12,7 @@ exports.userType = new GraphQLObjectType({
             age: { type: GraphQLString },
             tel: { type: GraphQLString },
             email: { type: new GraphQLNonNull(GraphQLString) },
-            addresses : {type : new GraphQLList(AddressType)},
+            addressIDs : {type: new GraphQLList(GraphQLString)},
             token: {
                 type: GraphQLString,
                 description: 'Status of user, whether active or disable',

@@ -24,11 +24,10 @@ var userSchema = new Schema({
         type : String,
         required : true
     },
-    adđress : [
+    addressIDs: [
         {
-            type : Schema.Types.ObjectId,
-            ref : 'addresses',
-            required : false
+            type: Schema.Types.ObjectId,
+            required : true
         }
     ]
 })

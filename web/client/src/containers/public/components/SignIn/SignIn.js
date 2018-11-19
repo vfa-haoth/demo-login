@@ -17,7 +17,7 @@ class SignIn extends Component {
     }
 
     this.baseCtrl = new BaseControllers();
-    this.apiCtrl = new APIAuthenticateControllers();
+    this.apiAuthCtrl = new APIAuthenticateControllers();
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -36,8 +36,7 @@ class SignIn extends Component {
     }
 
     if (!errors) {
-      var signIn = this.apiCtrl.signIn(signInData);
-
+      var signIn = this.apiAuthCtrl.signIn(signInData);
       signIn.then((val) => {
         if (val.success) {
           this.props.history.push('/');

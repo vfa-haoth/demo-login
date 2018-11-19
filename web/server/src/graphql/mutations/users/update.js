@@ -1,7 +1,7 @@
 var { GraphQLNonNull, GraphQLString, GraphQLList } = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
-var AddressType = require('./../../types/address');
+var AddressType = require('./../../types/address'); 
 
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -13,28 +13,8 @@ exports.update = {
             name: 'id',
             type: new GraphQLNonNull(GraphQLString)
         },
-        username: {
-            type: GraphQLString,
-            required: true
-        },
-        password: {
-            type: GraphQLString,
-            required: true
-        },
-        age: {
-            type: GraphQLString,
-            required: false
-        },
-        tel: {
-            type: GraphQLString,
-            required: false
-        },
-        email: {
-            type: GraphQLString,
-            required: true
-        },
-        addresses : {
-            type: GraphQLString,
+        addressIDs : {
+            type : new GraphQLList(GraphQLString),
             required : false
         }
     },
@@ -42,8 +22,8 @@ exports.update = {
         return UserModel.findByIdAndUpdate(
             params.id,
             {
-                $set: {
-                    username: params.username
+                $push: {
+                    addressIDs: params.addressIDs,
                 }
             },
             { new: true }

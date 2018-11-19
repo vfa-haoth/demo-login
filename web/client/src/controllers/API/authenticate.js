@@ -18,6 +18,7 @@ export default class APIAuthenticateControllers {
                     age
                     tel
                     email
+                    addressIDs
                     token
                 }
             }
@@ -27,6 +28,7 @@ export default class APIAuthenticateControllers {
         
         return result.then((val) => {
             if (val.success) {
+                console.log("val success")
                 if (val.data.userSignin) {
                     localStorage.setItem('userData', JSON.stringify(val.data.userSignin))
                     console.log("sign in success")
@@ -51,7 +53,8 @@ export default class APIAuthenticateControllers {
                 username : userData.username,
                 age : userData.age,
                 tel : userData.tel,
-                email : userData.email
+                email : userData.email,
+                addressIDs: userData.addressIDs
             }}
         } else {
             data = {success : false}

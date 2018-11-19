@@ -25,6 +25,10 @@ exports.add = {
         email: {
             type: GraphQLString,
             required: true
+        },
+        addressIDs: {
+            type: new GraphQLList(GraphQLString),
+            required: true
         }
     },
     resolve(root, params) {

@@ -60,13 +60,13 @@ const root = new GraphQLObjectType({
         addressDetail : {
             type : new GraphQLList(addressType),
             args : {
-                _id : {
+                id : {
                     type : GraphQLString,
                     required : true
                 }
             },
-            resolve : function(root, {_id}) {
-                const data = AddressModel.find({_id}).exec()
+            resolve : function(root, {id}) {
+                const data = AddressModel.find({id}).exec()
                 if(!data){
                     throw new Error("Error")
                 }

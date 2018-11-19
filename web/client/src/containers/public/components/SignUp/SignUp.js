@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import APIAuthenticateControllers from './../../../../controllers/API/authenticate';
 import APIControllers from './../../../../controllers/API/index';
 import BaseControllers from '../../../../controllers/Base';
 
@@ -102,17 +101,6 @@ class SignUp extends Component {
                                     onChange={this.onChange} />
                             </div>
                             <br />
-                            {/* <label>Confirm password</label>
-                            <div className="form-group">
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    className="form-control"
-                                    placeholder="Confirm password"
-                                    value={confirmPassword}
-                                    onChange={this.onChange} />
-                            </div>
-                            <br /> */}
                             <label>Age</label>
                             <div className="form-group">
                                 <input

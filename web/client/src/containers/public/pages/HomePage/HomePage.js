@@ -12,7 +12,8 @@ class HomePage extends Component {
             age: '',
             tel: '',
             email: '',
-            address: '',
+            addressIDs: [],
+            addressField : '',
             isSignedin: false
         }
 
@@ -29,7 +30,7 @@ class HomePage extends Component {
                 age: result.data[0].age,
                 tel: result.data[0].tel,
                 email: result.data[0].email,
-                address: result.data[0].address,
+                addressIDs: result.data[0].addressIDs,
             })
         } else {
             this.setState({
@@ -56,7 +57,7 @@ class HomePage extends Component {
         this.checkSignedIn();
         // this.getUserDetail();
     }
-
+    
     render() {
         if (!this.state.isSignedin) {
             return (
@@ -83,7 +84,8 @@ class HomePage extends Component {
                             age={this.state.age}
                             tel={this.state.tel}
                             email={this.state.email}
-                            address={this.state.address}
+                            addressField={this.state.addressField}
+                            addressIDs={this.state.addressIDs}
                             isSignedin={this.state.isSignedin}
                         />
                     </div>
