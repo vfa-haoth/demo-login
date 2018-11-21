@@ -73,7 +73,7 @@ export default class APIControllers {
         return result.then((val) => {
             if (val.success) {
                 return { success: true }
-            }else {
+            } else {
                 console.log("failed")
             }
             return { success: false }
@@ -91,12 +91,13 @@ export default class APIControllers {
                     city : "${params.city}",
                     userID : "${params.userID}"
                 ) {
-                code
-                street
-                ward
-                district
-                city
-                userID
+                    id
+                    code
+                    street
+                    ward
+                    district
+                    city
+                    userID
                 }
             }
         `
@@ -106,7 +107,7 @@ export default class APIControllers {
         return result.then((val) => {
             if (val.success) {
                 return { success: true }
-            }else {
+            } else {
                 console.log("failed")
             }
             return { success: false }
@@ -138,7 +139,7 @@ export default class APIControllers {
         return result.then((val) => {
             if (val.success) {
                 return { success: true }
-            }else {
+            } else {
                 console.log("failed")
             }
             return { success: false }
@@ -149,10 +150,10 @@ export default class APIControllers {
         var app_query = gql`
             mutation {
                 updateAddress (
-                    id : "${params._id}",
-                    addressIDs : "${params.address}"
+                    id : "${params.userID}",
+                    addressIDs : "${params._id}"
                 ) {
-                addressIDs
+                    addressIDs
                 }
             }
         `
@@ -162,7 +163,7 @@ export default class APIControllers {
         return result.then((val) => {
             if (val.success) {
                 return { success: true }
-            }else {
+            } else {
                 console.log("failed")
             }
             return { success: false }
@@ -195,6 +196,15 @@ export default class APIControllers {
                     email
                     addressIDs
                 }
+                addressDetail(userID:"${userID}"){
+                    _id
+                    code
+                    street
+                    ward
+                    district
+                    city
+                    userID
+                }
             }
         `
 
@@ -203,7 +213,7 @@ export default class APIControllers {
         return result.then((val) => {
             if (val.success) {
                 if (val.data.userDetail) {
-                    return { success: true, data: val.data.userDetail }
+                    return { success: true, userData: val.data.userDetail, addressData: val.data.addressDetail }
                 }
             }
             return { success: false }

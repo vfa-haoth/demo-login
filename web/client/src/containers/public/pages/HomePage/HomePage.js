@@ -13,7 +13,15 @@ class HomePage extends Component {
             tel: '',
             email: '',
             addressIDs: [],
-            addressField : '',
+            address: [{
+                code: '',
+                street: '',
+                ward: '',
+                district: '',
+                city: '',
+                userID: ''
+            }],
+            addressField: '',
             isSignedin: false
         }
 
@@ -26,11 +34,22 @@ class HomePage extends Component {
         if (result.success) {
             this.setState({
                 isSignedin: true,
-                username: result.data[0].username,
-                age: result.data[0].age,
-                tel: result.data[0].tel,
-                email: result.data[0].email,
-                addressIDs: result.data[0].addressIDs,
+                username: result.userData[0].username,
+                age: result.userData[0].age,
+                tel: result.userData[0].tel,
+                email: result.userData[0].email,
+                addressIDs: result.userData[0].addressIDs,
+                address: result.addressData.map(address => {
+                    return (
+                        {
+                            code: address.code,
+                            street: address.street,
+                            ward: address.ward,
+                            district: address.district,
+                            city: address.city
+                        }
+                    )
+                })
             })
         } else {
             this.setState({
@@ -57,7 +76,7 @@ class HomePage extends Component {
         this.checkSignedIn();
         // this.getUserDetail();
     }
-    
+
     render() {
         if (!this.state.isSignedin) {
             return (
@@ -86,6 +105,7 @@ class HomePage extends Component {
                             email={this.state.email}
                             addressField={this.state.addressField}
                             addressIDs={this.state.addressIDs}
+                            address={this.state.address}
                             isSignedin={this.state.isSignedin}
                         />
                     </div>

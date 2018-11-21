@@ -8,23 +8,23 @@ class Home extends Component {
         super(props)
         this.state = {
             userProfile: {
-                id :'',
+                id: '',
                 username: '',
                 age: '',
                 tel: '',
                 email: '',
-                address: {
-                    code : '',
-                    street : '',
-                    ward : '',
-                    district : '',
-                    city : '',
-                    userID : ''
-                },
+                address: [{
+                    code: '',
+                    street: '',
+                    ward: '',
+                    district: '',
+                    city: '',
+                    userID: ''
+                }],
                 addressIDs: []
             },
             addressField: '',
-            isAddAddress : false
+            isAddAddress: false
         }
 
         this.apiCtrl = new APIControllers();
@@ -32,14 +32,15 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        var { username, age, tel, email, addressIDs, addressField } = this.props;
+        var { username, age, tel, email, addressIDs, addressField, address } = this.props;
         this.setState({
             username,
             age,
             tel,
             email,
             addressIDs,
-            addressField
+            addressField,
+            address
         })
     }
 
@@ -53,13 +54,35 @@ class Home extends Component {
         })
     }
 
-    async onSubmit(){
+    splitAddressAttribute = (addressField) => {
+        var attributeArray = addressField.split(" ");
+        this.setState({
+            code : attributeArray[0],
+            street : attributeArray[1],
+            ward : attributeArray[2],
+            district : attributeArray[3],
+            city : attributeArray[4]
+        })
+    }
+
+    async onSubmit() {
         var userData = JSON.parse(localStorage.getItem('userData'));
         this.setState({
-            userID : userData.id
+            userID: userData.id
         })
 
-        var result = await this.apiCtrl.updateAddress(this.state.userProfile);
+        this.splitAddressAttribute(this.state.addressField);
+
+        var createAddress = await this.apiCtrl.saveAddress(this.state.userProfile.address);
+        createAddress.then(val => {
+            if (val.success) {
+                return true;
+            } else {
+                throw new Error("Create address failed!")
+            }
+        })
+
+        var result = await this.apiCtrl.updateAddress(this.state.userProfile.address);
         result.then(val => {
             if (val.success) {
                 this.props.history.push("/");
@@ -72,7 +95,7 @@ class Home extends Component {
 
     onAddAddress = () => {
         this.setState({
-            isAddAddress : !this.state.isAddAddress
+            isAddAddress: !this.state.isAddAddress
         })
     }
 
@@ -85,14 +108,14 @@ class Home extends Component {
     }
 
     render() {
-        var { 
-            username, 
-            age, 
-            tel, 
-            email, 
-            addressIDs, 
-            addressField, 
-            isAddAddress 
+        var {
+            username,
+            age,
+            tel,
+            email,
+            address,
+            addressField,
+            isAddAddress
         } = this.state;
 
         if (!this.props.isSignedin) {
@@ -108,15 +131,18 @@ class Home extends Component {
                 </div>
             )
         } else {
-            const listOfAddress = addressIDs.map((address, index) =>
-                <tr key={index}>
-                    <td>{address.code}</td>
-                    <td>{address.street}</td>
-                    <td>{address.ward}</td>
-                    <td>{address.district}</td>
-                    <td>{address.city}</td>
-                </tr>
-            )
+            const listOfAddress = address.map((ad, index) => {
+                return (
+                    <tr key={index}>
+                        <td>{ad.code}</td>
+                        <td>{ad.street}</td>
+                        <td>{ad.ward}</td>
+                        <td>{ad.district}</td>
+                        <td>{ad.city}</td>
+                    </tr>
+                )
+            })
+            console.log(address)
             return (
                 <React.Fragment>
                     <div className="row">
@@ -160,8 +186,8 @@ class Home extends Component {
                                         min={"8"}
                                         max={"100"}
                                         value={age}
-                                        onChange={this.onChange} 
-                                        disabled={isAddAddress ? true : false}/>
+                                        onChange={this.onChange}
+                                        disabled={isAddAddress ? true : false} />
                                 </div>
                                 <br />
                                 <label>Tel</label>
@@ -172,8 +198,8 @@ class Home extends Component {
                                         className="form-control"
                                         placeholder="Input telephone number"
                                         value={tel}
-                                        onChange={this.onChange} 
-                                        disabled={isAddAddress ? true : false}/>
+                                        onChange={this.onChange}
+                                        disabled={isAddAddress ? true : false} />
                                 </div>
                                 <br />
                                 <label>Email</label>
@@ -184,19 +210,19 @@ class Home extends Component {
                                         className="form-control"
                                         placeholder="Input email address"
                                         value={email}
-                                        onChange={this.onChange} 
-                                        disabled={isAddAddress ? true : false}/>
+                                        onChange={this.onChange}
+                                        disabled={isAddAddress ? true : false} />
                                 </div>
                                 <br />
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     className="btn btn-success"
                                     onClick={this.onAddAddress}
                                 >
-                                    Add address
+                                    {isAddAddress ? 'Edit profile' : 'Add address'}
                                 </button>
-                                <br/>
-                                <br/>
+                                <br />
+                                <br />
                                 <label>Address</label>
                                 <div className="form-group">
                                     <textarea

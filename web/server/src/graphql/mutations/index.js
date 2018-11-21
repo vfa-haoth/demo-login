@@ -1,9 +1,9 @@
-var {addUser, updateUser, removeUser, userSignin} = require('./users');
+var {addUser, updateAddress, removeUser, userSignin} = require('./users');
 var {addAddress} = require('./addresses');
 
 module.exports = {
     addUser,
-    updateUser,
+    updateAddress,
     userSignin,
     removeUser,
     addAddress,
