@@ -8,12 +8,12 @@ class Home extends Component {
         super(props)
         this.state = {
             userProfile: {
-                id: '',
                 username: '',
                 age: '',
                 tel: '',
                 email: '',
                 address: [{
+                    id: '',
                     code: '',
                     street: '',
                     ward: '',
@@ -23,25 +23,52 @@ class Home extends Component {
                 }],
                 addressIDs: []
             },
+            isSignedin: false,
             addressField: '',
-            isAddAddress: false
+            isAddAddress: true,
         }
+        var isSubmit=false;
+        var addressUpdating = {};
 
         this.apiCtrl = new APIControllers();
         this.apiAuthCtrl = new APIAuthenticateControllers();
+        this.onSubmit = this.onSubmit.bind(this);
+        this.splitAddressAttribute = this.splitAddressAttribute.bind(this);
     }
 
-    componentWillMount() {
-        var { username, age, tel, email, addressIDs, addressField, address } = this.props;
-        this.setState({
-            username,
-            age,
-            tel,
-            email,
-            addressIDs,
-            addressField,
-            address
-        })
+    checkSignedIn = async () => {
+        var result = await this.apiCtrl.getUserData();
+        if (result.success) {
+            this.setState({
+                isSignedin: true,
+                username: result.userData[0].username,
+                age: result.userData[0].age,
+                tel: result.userData[0].tel,
+                email: result.userData[0].email,
+                addressIDs: result.userData[0].addressIDs,
+                address: result.addressData.map(address => {
+                    return (
+                        {
+                            code: address.code,
+                            street: address.street,
+                            ward: address.ward,
+                            district: address.district,
+                            city: address.city
+                        }
+                    )
+                })
+            })
+
+        } else {
+            this.setState({
+                isSignedin: false,
+                username: ''
+            })
+        }
+    }
+
+    componentDidMount() {
+        this.checkSignedIn();
     }
 
     onChange = (event) => {
@@ -55,42 +82,71 @@ class Home extends Component {
     }
 
     splitAddressAttribute = (addressField) => {
+        console.log(addressField);
         var attributeArray = addressField.split(" ");
+        console.log(attributeArray);
+
+        var userData = JSON.parse(localStorage.getItem('userData'));
+
         this.setState({
-            code : attributeArray[0],
-            street : attributeArray[1],
-            ward : attributeArray[2],
-            district : attributeArray[3],
-            city : attributeArray[4]
+            // test: attributeArray[0],
+            userProfile: {
+                address: {
+                    code: attributeArray[0],
+                    street: attributeArray[1],
+                    ward: attributeArray[2],
+                    district: attributeArray[3],
+                    city: attributeArray[4],
+                    userID: userData._id
+                }
+            }
         })
     }
 
-    async onSubmit() {
-        var userData = JSON.parse(localStorage.getItem('userData'));
-        this.setState({
-            userID: userData.id
-        })
+    async componentWillUpdate() {
+        console.log(this.isSubmit + " clicked")
+        if (this.isSubmit) {
+            this.isSubmit = !this.isSubmit;
+            var oneObj = this.state.userProfile.address[0];
+            console.log(oneObj);
+            var createAddress = await this.apiCtrl.saveAddress(oneObj);
+
+            console.log(this.state.userProfile.address);
+            
+            if (createAddress.success) {
+                console.log("Address is created")
+                this.addressUpdating = {
+                    id : createAddress.data._id,
+                    userID : this.state.userProfile.address.userID
+                }
+                console.log(this.addressUpdating)
+            } else {
+                console.log("Create address failed!")
+            }
+
+            // var result = await this.apiCtrl.updateAddress(this.addressUpdating);
+            // console.log(this.state.userProfile.address);
+
+            // if (result.success) {
+            //     console.log(this.state.userProfile.address);
+
+            //     console.log("Address updated")
+            //     console.log(result.data.addressIDs)
+            //     // return true;
+            // } else {
+            //     console.log("Update address failed");
+            // }
+        }
+    }
+
+    async onSubmit(event) {
+        event.preventDefault();
+
+        this.isSubmit = !this.isSubmit;
+
+        console.log(this.state.isSubmit)
 
         this.splitAddressAttribute(this.state.addressField);
-
-        var createAddress = await this.apiCtrl.saveAddress(this.state.userProfile.address);
-        createAddress.then(val => {
-            if (val.success) {
-                return true;
-            } else {
-                throw new Error("Create address failed!")
-            }
-        })
-
-        var result = await this.apiCtrl.updateAddress(this.state.userProfile.address);
-        result.then(val => {
-            if (val.success) {
-                this.props.history.push("/");
-                return true;
-            } else {
-                console.log("Sign up failed!");
-            }
-        })
     }
 
     onAddAddress = () => {
@@ -113,12 +169,13 @@ class Home extends Component {
             age,
             tel,
             email,
-            address,
+            addressIDs,
             addressField,
+            address,
             isAddAddress
         } = this.state;
 
-        if (!this.props.isSignedin) {
+        if (!this.state.isSignedin) {
             return (
                 <div className="text-center">
                     <button
@@ -142,7 +199,7 @@ class Home extends Component {
                     </tr>
                 )
             })
-            console.log(address)
+            // console.log(listOfAddress);
             return (
                 <React.Fragment>
                     <div className="row">
@@ -229,7 +286,7 @@ class Home extends Component {
                                         name="addressField"
                                         className="form-control"
                                         rows="3"
-                                        placeholder="Input house address"
+                                        placeholder="Input address as format <code> <street> <ward> <district> <city>"
                                         value={addressField}
                                         onChange={this.onChange}
                                         disabled={isAddAddress ? false : true}

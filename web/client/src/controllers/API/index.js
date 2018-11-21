@@ -81,17 +81,18 @@ export default class APIControllers {
     }
 
     async saveAddress(params) {
+        console.log(params);
         var app_query = gql`
             mutation {
                 addAddress (
-                    code : "${params.code}",
-                    street : "${params.street}",
-                    ward : "${params.ward}",
-                    district : "${params.district}",
-                    city : "${params.city}",
-                    userID : "${params.userID}"
+                    code : "'${params.code}'",
+                    street : "'${params.street}'",
+                    ward : "'${params.ward}'",
+                    district : "'${params.district}'",
+                    city : "'${params.city}'",
+                    userID : "'${params.userID}'"
                 ) {
-                    id
+                    _id
                     code
                     street
                     ward
@@ -101,12 +102,11 @@ export default class APIControllers {
                 }
             }
         `
-
+        
         var result = this.graphQLController.mutate(app_query);
-
         return result.then((val) => {
             if (val.success) {
-                return { success: true }
+                return { success: true , data : val.data.addAddress}
             } else {
                 console.log("failed")
             }
@@ -151,7 +151,7 @@ export default class APIControllers {
             mutation {
                 updateAddress (
                     id : "${params.userID}",
-                    addressIDs : "${params._id}"
+                    addressIDs : "${params.id}"
                 ) {
                     addressIDs
                 }
@@ -162,7 +162,7 @@ export default class APIControllers {
 
         return result.then((val) => {
             if (val.success) {
-                return { success: true }
+                return { success: true, data : val.data.updateAddress }
             } else {
                 console.log("failed")
             }
