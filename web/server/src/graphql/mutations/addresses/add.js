@@ -1,6 +1,7 @@
-var { GraphQLList, GraphQLString } = require('graphql');
+var { GraphQLList, GraphQLString, GraphQLID } = require('graphql');
 var AddressType = require('./../../types/address');
 var AddressModel = require('./../../../models/addresses');
+var UserType = require('./../../types/user');
 
 exports.add = {
     type: AddressType.addressType,
@@ -26,8 +27,9 @@ exports.add = {
             required: true
         },
         userID: {
-            type: GraphQLString,
-            required : true
+            type: GraphQLID,
+            required : true,
+            resolve: (UserType) => UserType._id
         }
     },
     resolve(root, params) {

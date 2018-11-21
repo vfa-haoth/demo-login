@@ -23,7 +23,7 @@ var addressSchema = new Schema({
         required: true
     },
     userID: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true
     }
 })
