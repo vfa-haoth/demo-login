@@ -1,21 +1,43 @@
-var { GraphQLNonNull, GraphQLString, GraphQLList } = require('graphql');
+var { GraphQLNonNull, GraphQLString, GraphQLList, GraphQLID } = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
-var AddressType = require('./../../types/address'); 
+var AddressType = require('./../../types/address');
+var AddressModel = require('./../../../models/addresses');
 
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 
 exports.update = {
-    type: UserType.userType,
+    type: AddressType.addressType,
     args: {
         id: {
             name: 'id',
-            type: new GraphQLNonNull(GraphQLString)
+            type: new GraphQLNonNull(GraphQLID)
         },
-        addressIDs : {
-            type : new GraphQLList(GraphQLString),
-            required : false
+        _id: {
+            type: GraphQLID,
+            required: false,
+            unique : true
+        },
+        code: {
+            type: GraphQLString,
+            required: false
+        },
+        street: {
+            type: GraphQLString,
+            required: false
+        },
+        ward: {
+            type: GraphQLString,
+            required: false
+        },
+        district: {
+            type: GraphQLString,
+            required: false
+        },
+        city: {
+            type: GraphQLString,
+            required: false
         }
     },
     resolve(root, params) {
@@ -23,7 +45,14 @@ exports.update = {
             params.id,
             {
                 $push: {
-                    addressIDs: params.addressIDs,
+                    "addressIDs": {
+                        _id: params._id,
+                        code: params.code,
+                        street: params.street,
+                        ward: params.ward,
+                        district: params.district,
+                        city: params.city
+                    }
                 }
             },
             { new: true }

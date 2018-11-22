@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
+const addresses = require('./addresses');
 
 var userSchema = new Schema({
     username : {
@@ -26,7 +27,8 @@ var userSchema = new Schema({
     },
     addressIDs: [
         {
-            type: Schema.Types.ObjectId,
+            type: addresses.schema,
+            ref : 'addresses',
             required : true
         }
     ]

@@ -26,11 +26,10 @@ exports.add = {
             type: GraphQLString,
             required: true
         },
-        userID: {
-            type: GraphQLID,
-            required : true,
-            resolve: (UserType) => UserType._id
-        }
+        // userID: {
+        //     type: GraphQLID,
+        //     required : true
+        // }
     },
     resolve(root, params) {
         const addressModel = new AddressModel(params);

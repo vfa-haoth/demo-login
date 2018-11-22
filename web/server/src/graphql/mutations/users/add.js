@@ -27,7 +27,7 @@ exports.add = {
             required: true
         },
         addressIDs: {
-            type: new GraphQLList(GraphQLString),
+            type: new GraphQLList(GraphQLID),
             required: false
         }
     },

@@ -13,10 +13,7 @@ const root = new GraphQLObjectType({
             type : new GraphQLList(userType),
             resolve : function() {
                 const users = UserModel.find().exec();
-                const count = UserModel.countDocuments().exec();
-                count.then(data => {
-                    console.log(data)
-                })
+                
                 console.log(JSON.stringify(users));
                 if(!users) {
                      throw new Error('Error')
@@ -34,7 +31,10 @@ const root = new GraphQLObjectType({
                 }
             },
             resolve: function (root, {_id}) {
-                const data = UserModel.find({_id}).exec()
+                const data = UserModel.find({_id})
+                .populate('addressIDs', '_id code street ward district city userID')
+                .exec()
+                
                 if(!data){
                     throw new Error('Error');
                 }

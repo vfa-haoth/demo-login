@@ -85,12 +85,11 @@ export default class APIControllers {
         var app_query = gql`
             mutation {
                 addAddress (
-                    code : "'${params.code}'",
-                    street : "'${params.street}'",
-                    ward : "'${params.ward}'",
-                    district : "'${params.district}'",
-                    city : "'${params.city}'",
-                    userID : "'${params.userID}'"
+                    code : "${params.code}",
+                    street : "${params.street}",
+                    ward : "${params.ward}",
+                    district : "${params.district}",
+                    city : "${params.city}"
                 ) {
                     _id
                     code
@@ -98,15 +97,14 @@ export default class APIControllers {
                     ward
                     district
                     city
-                    userID
                 }
             }
         `
-        
+
         var result = this.graphQLController.mutate(app_query);
         return result.then((val) => {
             if (val.success) {
-                return { success: true , data : val.data.addAddress}
+                return { success: true, data: val.data.addAddress }
             } else {
                 console.log("failed")
             }
@@ -147,13 +145,19 @@ export default class APIControllers {
     }
 
     async updateAddress(params) {
+        console.log(params)
         var app_query = gql`
             mutation {
                 updateAddress (
                     id : "${params.userID}",
-                    addressIDs : "${params.id}"
+                    _id : "${params.id}",
+                    code : "${params.code}",
+                    street : "${params.street}",
+                    ward : "${params.ward}",
+                    district : "${params.district}",
+                    city : "${params.city}"
                 ) {
-                    addressIDs
+                    _id
                 }
             }
         `
@@ -162,7 +166,7 @@ export default class APIControllers {
 
         return result.then((val) => {
             if (val.success) {
-                return { success: true, data : val.data.updateAddress }
+                return { success: true }
             } else {
                 console.log("failed")
             }
@@ -189,21 +193,18 @@ export default class APIControllers {
         var app_query = gql`
             query {
                 userDetail (_id : "${userID}") {
-                    _id
                     username
                     age
                     tel
                     email
-                    addressIDs
-                }
-                addressDetail(userID:"${userID}"){
-                    _id
-                    code
-                    street
-                    ward
-                    district
-                    city
-                    userID
+                    addressIDs{
+                        _id
+                        code
+                        street
+                        ward
+                        district
+                        city
+                    }
                 }
             }
         `
@@ -213,51 +214,10 @@ export default class APIControllers {
         return result.then((val) => {
             if (val.success) {
                 if (val.data.userDetail) {
-                    return { success: true, userData: val.data.userDetail, addressData: val.data.addressDetail }
+                    return { success: true, userData: val.data.userDetail }
                 }
             }
             return { success: false }
         })
     }
-
-    // getAddressData(params = null) {
-    //     let userData = JSON.parse(localStorage.getItem('userData'))
-    //     let addressID = '';
-
-    //     if (userData) {
-    //         addressID = userData.address._id;
-    //     }
-
-    //     if (params) {
-    //         addressID = params.address._id;
-    //     }
-
-    //     if (addressID === 0) {
-    //         return { success: false }
-    //     }
-
-    //     var app_query = gql`
-    //         query {
-    //             addressDetail (_id : "${addressID}") {
-    //                 _id
-    //                 code
-    //                 street
-    //                 ward
-    //                 district
-    //                 city
-    //             }
-    //         }
-    //     `
-
-    //     var result = this.graphQLController.query(app_query)
-
-    //     return result.then((val) => {
-    //         if (val.success) {
-    //             if (val.data.addressDetail) {
-    //                 return { success: true, data: val.data.addressDetail }
-    //             }
-    //         }
-    //         return { success: false }
-    //     })
-    // }
 }

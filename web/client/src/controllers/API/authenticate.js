@@ -18,7 +18,14 @@ export default class APIAuthenticateControllers {
                     age
                     tel
                     email
-                    addressIDs
+                    addressIDs{
+                        _id
+                        code
+                        street
+                        ward
+                        district
+                        city
+                    }
                     token
                 }
             }
