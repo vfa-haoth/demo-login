@@ -6,9 +6,9 @@ class SignInPage extends Component {
     return (
         <div>
           <div className="row">
-            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             </div>
-            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4">
               <SignIn history={this.props.history}/>
             </div>
           </div>

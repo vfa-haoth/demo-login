@@ -15,7 +15,6 @@ class AddAddressForm extends Component {
                 district: '',
                 city: ''
             }],
-            addressField: '',
             update: false
         }
         this.hasAddress = false;
@@ -31,7 +30,7 @@ class AddAddressForm extends Component {
     componentWillMount() {
         var data = JSON.parse(localStorage.getItem('userData'));
         console.log(data.addressIDs)
-        
+
         this.setState({
             address: data.addressIDs
         })
@@ -77,14 +76,14 @@ class AddAddressForm extends Component {
                 this.setState({
                     update: true,
                     address: [
-                        ...this.state.address,{
-                        id: this.editingAddress.id,
-                        code: this.editingAddress.code,
-                        street: this.editingAddress.street,
-                        ward: this.editingAddress.ward,
-                        district: this.editingAddress.district,
-                        city: this.editingAddress.city,
-                    }]
+                        ...this.state.address, {
+                            id: this.editingAddress.id,
+                            code: this.editingAddress.code,
+                            street: this.editingAddress.street,
+                            ward: this.editingAddress.ward,
+                            district: this.editingAddress.district,
+                            city: this.editingAddress.city,
+                        }]
                 })
             } else {
                 console.log("Update address failed")
@@ -137,14 +136,52 @@ class AddAddressForm extends Component {
                 <div className="panel-body">
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <textarea
-                                name="addressField"
-                                className="form-control"
-                                rows="3"
-                                placeholder="Input address as format <code> <street> <ward> <district> <city>"
-                                value={this.state.addressField}
-                                onChange={this.onChange}
-                            />
+                            <div className="form-group">
+                                <div className="row">
+                                    <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <label>Code</label><br />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="codeField"
+                                        />
+                                    </div>
+                                    <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                                        <label>Street</label><br />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="streetField"
+                                        />
+                                    </div>
+                                </div><br />
+                                <div className="row">
+                                    <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <label>Ward</label><br />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="wardField"
+                                        />
+                                    </div>
+                                    <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                        <label>District</label><br />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="districtField"
+                                        />
+                                    </div>
+                                    <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                        <label>City</label><br />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="cityField"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <br />
                         {showAddressList}
