@@ -1,7 +1,16 @@
-.profile-info {
-    margin-right: 10%
+/* .profile-info {
+    margin-left: 30%
+} */
+
+.info-panel{
+    border-width: 2px;
 }
 
-.address-panel {
-    margin-left: 0%;
+.infoDiv {
+    height: 300;
+    background-color: aqua;
+}
+
+.signout{
+    float: right
 }

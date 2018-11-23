@@ -68,7 +68,7 @@ class AddressList extends Component {
         console.log(this.props.address)
         return (
             <div className="panel panel-default">
-                <div className="panel-heading">List of addresses</div>
+                <div className="panel-heading text-center">List of addresses</div>
                 <table className="table">
                     <thead>
                         <tr>

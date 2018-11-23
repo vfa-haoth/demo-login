@@ -131,7 +131,7 @@ class Home extends Component {
                 /> : '';
             return (
                 <React.Fragment>
-                    <div className="row">
+                    <div className="row text-center">
                         <div className="alert alert-success">
                             <button type="button" className="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             <h2> Hi <strong><span>{username}</span></strong>, let's check your profile shall we?</h2>
@@ -144,35 +144,53 @@ class Home extends Component {
                             </button>
                         </div>
                     </div>
-
                     <div className="panel panel-info">
                         <div className="panel-heading">
                             <h3 className="panel-title">{username}'s profile</h3>
                         </div>
                         <div className="panel-body">
                             <form onSubmit={(event) => this.onSubmit(event)}>
-                                <div>
-                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        <label>Username: </label><br />
-                                        <label>Age: </label><br />
-                                        <label>Tel: </label><br />
-                                        <label>Email: </label><br />    
-                                    </div>
-                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                        <span className='profile-info'> {username}</span>
-                                        <br />
-
-                                        <span className='profile-info'> {age}</span>
-                                        <br />
-
-                                        <span className='profile-info'> {tel}</span>
-                                        <br />
-
-                                        <span className='profile-info'> {email}</span>
-                                        <br />
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <label>Username: </label>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                                <span className='profile-info'> {username}</span>
+                                                <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <label>Age: </label>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                                <span className='profile-info'> {age}</span>
+                                                <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <label>Tel: </label>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                                <span className='profile-info'> {tel}</span>
+                                                <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                <label>Email: </label>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                                <span className='profile-info'> {email}</span>
+                                                <br />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <React.Fragment>
+                                <div>
                                     <button
                                         type="button"
                                         className="btn btn-success"
@@ -188,23 +206,19 @@ class Home extends Component {
                                     >
                                         Add address
                                     </button>
-                                </React.Fragment>
-                                <br />
+                                    <button
+                                        type="button"
+                                        className="btn btn-danger signout"
+                                        onClick={this.signOut}
+                                    >
+                                        Sign out
+                                    </button>
+                                </div>
                             </form>
                             <br />
-                            <div className="address-panel">
+                            <div>
                                 {addingAddress}
                             </div>
-                            <br />
-                            <form>
-                                <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    onClick={this.signOut}
-                                >
-                                    Sign out
-                            </button>
-                            </form>
                         </div>
                     </div>
                 </React.Fragment >
