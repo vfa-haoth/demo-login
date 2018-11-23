@@ -16,6 +16,7 @@ class AddAddressForm extends Component {
                 city: ''
             }],
             addressField: '',
+            update: false
         }
         this.hasAddress = false;
         this.isSubmit = false;
@@ -25,6 +26,15 @@ class AddAddressForm extends Component {
         this.apiCtrl = new APIControllers();
 
         this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    componentWillMount() {
+        var data = JSON.parse(localStorage.getItem('userData'));
+        console.log(data.addressIDs)
+        
+        this.setState({
+            address: data.addressIDs
+        })
     }
 
     async onSubmit(event) {
@@ -37,18 +47,6 @@ class AddAddressForm extends Component {
         this.splitAddressAttribute(this.state.addressField);
         await this.createAddress();
         await this.updateAddress();
-    }
-
-    async getAddressData() {
-        var data = await this.apiCtrl.getUserData();
-        if (data.success) {
-            console.log("Refeshed data")
-            console.log(data.userData[0].addressIDs)
-            this.addressGot = data.userData[0].addressIDs;
-            return data.userData[0];
-        } else {
-            console.log("Get data failed")
-        }
     }
 
     async createAddress() {
@@ -76,6 +74,18 @@ class AddAddressForm extends Component {
             var result = await this.apiCtrl.updateAddress(this.editingAddress);
             if (result.success) {
                 console.log("Address updated")
+                this.setState({
+                    update: true,
+                    address: [
+                        ...this.state.address,{
+                        id: this.editingAddress.id,
+                        code: this.editingAddress.code,
+                        street: this.editingAddress.street,
+                        ward: this.editingAddress.ward,
+                        district: this.editingAddress.district,
+                        city: this.editingAddress.city,
+                    }]
+                })
             } else {
                 console.log("Update address failed")
             }
@@ -111,9 +121,12 @@ class AddAddressForm extends Component {
         if (localData.addressIDs.length > 0) {
             this.hasAddress = true
         }
-        var showAddressList = this.hasAddress ?
+        console.log(this.state.update)
+        console.log(this.state.address)
+
+        var showAddressList = (this.hasAddress || this.state.update) ?
             <AddressList
-                addressList={this.addressGot}
+                addressList={this.state.address}
             /> : '';
 
         return (

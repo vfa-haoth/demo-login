@@ -3,6 +3,7 @@ import APIControllers from './../../../../controllers/API/index';
 import APIAuthenticateControllers from '../../../../controllers/API/authenticate';
 import AddressList from '../AddressList/AddressList';
 import AddAddressForm from '../AddAddressForm/AddAddressForm';
+import './Home.css';
 
 class Home extends Component {
 
@@ -80,7 +81,7 @@ class Home extends Component {
         })
     }
 
-    async onSubmit(event){
+    async onSubmit(event) {
         //Update user profile
         event.preventDefault();
     }
@@ -143,58 +144,34 @@ class Home extends Component {
                             </button>
                         </div>
                     </div>
+
                     <div className="panel panel-info">
                         <div className="panel-heading">
                             <h3 className="panel-title">{username}'s profile</h3>
                         </div>
                         <div className="panel-body">
                             <form onSubmit={(event) => this.onSubmit(event)}>
-                                <label>Username</label>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        className='form-control'
-                                        placeholder="Insert username"
-                                        value={username}
-                                        onChange={this.onChange} />
+                                <div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <label>Username: </label><br />
+                                        <label>Age: </label><br />
+                                        <label>Tel: </label><br />
+                                        <label>Email: </label><br />    
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                        <span className='profile-info'> {username}</span>
+                                        <br />
+
+                                        <span className='profile-info'> {age}</span>
+                                        <br />
+
+                                        <span className='profile-info'> {tel}</span>
+                                        <br />
+
+                                        <span className='profile-info'> {email}</span>
+                                        <br />
+                                    </div>
                                 </div>
-                                <br />
-                                <label>Age</label>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="age"
-                                        className="form-control"
-                                        placeholder="Insert your age"
-                                        min={"8"}
-                                        max={"100"}
-                                        value={age}
-                                        onChange={this.onChange} />
-                                </div>
-                                <br />
-                                <label>Tel</label>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="tel"
-                                        className="form-control"
-                                        placeholder="Input telephone number"
-                                        value={tel}
-                                        onChange={this.onChange} />
-                                </div>
-                                <br />
-                                <label>Email</label>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="email"
-                                        className="form-control"
-                                        placeholder="Input email address"
-                                        value={email}
-                                        onChange={this.onChange} />
-                                </div>
-                                <br />
                                 <React.Fragment>
                                     <button
                                         type="button"
@@ -215,7 +192,9 @@ class Home extends Component {
                                 <br />
                             </form>
                             <br />
-                            {addingAddress}
+                            <div className="address-panel">
+                                {addingAddress}
+                            </div>
                             <br />
                             <form>
                                 <button
