@@ -48,33 +48,33 @@ export default class APIAuthenticateControllers {
         })
     }
 
-    verifySignIn () {
-        let token = null;
-        let data = {};
-        let userData = JSON.parse(localStorage.getItem('userData'));
+    // verifySignIn () {
+    //     let token = null;
+    //     let data = {};
+    //     let userData = JSON.parse(localStorage.getItem('userData'));
 
-        if ( userData != null ) {
-            token = userData.token;
-            data = {success : true, userInfo : {
-                _id : userData._id,
-                username : userData.username,
-                age : userData.age,
-                tel : userData.tel,
-                email : userData.email,
-                addressIDs: userData.addressIDs
-            }}
-        } else {
-            data = {success : false}
-        }
+    //     if ( userData != null ) {
+    //         token = userData.token;
+    //         data = {success : true, userInfo : {
+    //             _id : userData._id,
+    //             username : userData.username,
+    //             age : userData.age,
+    //             tel : userData.tel,
+    //             email : userData.email,
+    //             addressIDs: userData.addressIDs
+    //         }}
+    //     } else {
+    //         data = {success : false}
+    //     }
 
-        return data;
-    }
+    //     return data;
+    // }
 
-    verifySignInToRedirect (props) {
-        if ( !this.verifySignIn().success ){
-            window.location = '/sign-in'
-        }
-    }
+    // verifySignInToRedirect (props) {
+    //     if ( !this.verifySignIn().success ){
+    //         window.location = '/sign-in'
+    //     }
+    // }
 
     signOut (props) {
         localStorage.clear();

@@ -1,7 +1,6 @@
 var { GraphQLList, GraphQLString, GraphQLID } = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
-var AdderssType = require('./../../types/address')
 
 exports.add = {
     type: UserType.userType,

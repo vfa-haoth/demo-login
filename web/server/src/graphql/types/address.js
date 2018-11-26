@@ -1,5 +1,4 @@
 let {GraphQLString, GraphQLObjectType, GraphQLID, GraphQLNonNull} = require('graphql')
-const UserType = require('./user');
 
 exports.addressType = new GraphQLObjectType({
     name: 'Address',
@@ -10,9 +9,7 @@ exports.addressType = new GraphQLObjectType({
             street: { type: GraphQLString },
             ward: { type: GraphQLString },
             district : { type: GraphQLString },
-            city : {type : GraphQLString},
-            // userID : {type : GraphQLID, resolve: (UserType) => UserType._id}
-            // userID : {type : UserType.userType}
+            city : {type : GraphQLString}
         }
     }
 })

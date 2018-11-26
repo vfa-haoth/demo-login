@@ -102,7 +102,7 @@ class SignIn extends Component {
                   </Link>
                 </p>
                 <br />
-                <div>
+                <div className="text-right">
                   <button type="submit" onClick={this.onSubmit} className="btn btn-primary">Submit</button>
                   &nbsp;
                   <button
