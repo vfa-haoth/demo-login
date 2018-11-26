@@ -15,6 +15,13 @@ class AddAddressForm extends Component {
                 district: '',
                 city: ''
             }],
+            addressField : {
+                codeField: '',
+                streetField: '',
+                wardField: '',
+                districtField: '',
+                cityField: ''
+            },
             update: false
         }
         this.hasAddress = false;
@@ -36,6 +43,16 @@ class AddAddressForm extends Component {
         })
     }
 
+    splitAddressAttribute = () => {
+        this.editingAddress = {
+            code: this.state.addressField.codeField,
+            street: this.state.addressField.streetField,
+            ward: this.state.addressField.wardField,
+            district: this.state.addressField.districtField,
+            city: this.state.addressField.cityField
+        }
+    }
+
     async onSubmit(event) {
         event.preventDefault();
 
@@ -43,7 +60,7 @@ class AddAddressForm extends Component {
 
         this.isSubmit = true;
 
-        this.splitAddressAttribute(this.state.addressField);
+        this.splitAddressAttribute();
         await this.createAddress();
         await this.updateAddress();
     }
@@ -91,20 +108,6 @@ class AddAddressForm extends Component {
         }
     }
 
-    splitAddressAttribute = (addressField) => {
-        console.log(addressField);
-        var attributeArray = addressField.split(" ");
-        console.log(attributeArray);
-
-        this.editingAddress = {
-            code: attributeArray[0],
-            street: attributeArray[1],
-            ward: attributeArray[2],
-            district: attributeArray[3],
-            city: attributeArray[4]
-        }
-    }
-
     onChange = (event) => {
         var target = event.target;
         var name = target.name;
@@ -144,6 +147,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="codeField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
@@ -152,6 +156,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="streetField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                 </div><br />
@@ -162,6 +167,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="wardField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -170,6 +176,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="districtField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -178,6 +185,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="cityField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                 </div>
