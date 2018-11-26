@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import APIControllers from './../../../../controllers/API/index';
 import APIAuthenticateControllers from '../../../../controllers/API/authenticate';
-import AddressList from '../AddressList/AddressList';
 import AddAddressForm from '../AddAddressForm/AddAddressForm';
 import './Home.css';
 
@@ -28,8 +27,6 @@ class Home extends Component {
             addressField: '',
             isAddingAddress: false
         }
-        var isSubmit = false;
-        var addressUpdating = {};
 
         this.apiCtrl = new APIControllers();
         this.apiAuthCtrl = new APIAuthenticateControllers();
@@ -45,18 +42,7 @@ class Home extends Component {
                 age: result.userData[0].age,
                 tel: result.userData[0].tel,
                 email: result.userData[0].email,
-                addressIDs: result.userData[0].addressIDs,
-                // address: result.addressData.map(address => {
-                //     return (
-                //         {
-                //             code: address.code,
-                //             street: address.street,
-                //             ward: address.ward,
-                //             district: address.district,
-                //             city: address.city
-                //         }
-                //     )
-                // })
+                addressIDs: result.userData[0].addressIDs
             })
 
         } else {
@@ -106,8 +92,6 @@ class Home extends Component {
             age,
             tel,
             email,
-            addressIDs,
-            addressField,
             isAddingAddress
         } = this.state;
 
@@ -124,8 +108,6 @@ class Home extends Component {
                 </div>
             )
         } else {
-
-            // console.log(listOfAddress);
             var addingAddress = isAddingAddress ?
                 <AddAddressForm
                 /> : '';
@@ -150,40 +132,40 @@ class Home extends Component {
                         </div>
                         <div className="panel-body">
                             <form onSubmit={(event) => this.onSubmit(event)}>
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <div className="panel panel-default">
+                                    <div className="panel-body">
+                                        <div className="row">
+                                            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                 <label>Username: </label>
                                             </div>
-                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
                                                 <span className='profile-info'> {username}</span>
                                                 <br />
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div className="row">
+                                            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                 <label>Age: </label>
                                             </div>
-                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
                                                 <span className='profile-info'> {age}</span>
                                                 <br />
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div className="row">
+                                            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                 <label>Tel: </label>
                                             </div>
-                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
                                                 <span className='profile-info'> {tel}</span>
                                                 <br />
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <div className="row">
+                                            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                 <label>Email: </label>
                                             </div>
-                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 info">
                                                 <span className='profile-info'> {email}</span>
                                                 <br />
                                             </div>

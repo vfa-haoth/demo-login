@@ -34,7 +34,6 @@ class AddAddressForm extends Component {
 
     componentWillMount() {
         var data = JSON.parse(localStorage.getItem('userData'));
-        console.log(data.addressIDs)
 
         this.setState({
             address: data.addressIDs
@@ -52,16 +51,10 @@ class AddAddressForm extends Component {
             district: this.state.districtField,
             city: this.state.cityField
         }
-        console.log(this.state)
-
-        console.log(this.editingAddress);
     }
 
     async onSubmit(event) {
         event.preventDefault();
-
-        console.log(this.isSubmit)
-        console.log(this.state.codeField)
 
         this.isSubmit = true;
 
@@ -113,6 +106,8 @@ class AddAddressForm extends Component {
             } else {
                 console.log("Update address failed")
             }
+
+            this.isSubmit = false;
         }
     }
 
@@ -131,8 +126,6 @@ class AddAddressForm extends Component {
         if (localData.addressIDs.length > 0) {
             this.hasAddress = true
         }
-        console.log(this.state.update)
-        console.log(this.state.address)
 
         var showAddressList = (this.hasAddress || this.state.update) ?
             <AddressList

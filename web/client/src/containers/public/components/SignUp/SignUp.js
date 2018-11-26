@@ -30,15 +30,13 @@ class SignUp extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        console.log("clicked")
         var { signUpData } = this.state;
         var errors = '';
 
-        if(!signUpData.username || !signUpData.password || !signUpData.email){
+        if (!signUpData.username || !signUpData.password || !signUpData.email) {
             errors = "Username, password and email is required!"
         }
 
-        console.log(errors)
         if (!errors) {
             var signUp = this.apiCtrl.saveUser(this.state.signUpData);
             signUp.then((val) => {
@@ -69,7 +67,7 @@ class SignUp extends Component {
     }
 
     render() {
-        var { username, password,  age, tel, email } = this.state.signUpData;
+        var { username, password, age, tel, email } = this.state.signUpData;
         var { isChecked } = this.state;
         return (
             <div>
@@ -135,7 +133,6 @@ class SignUp extends Component {
                                     value={email}
                                     onChange={this.onChange} />
                             </div>
-                            <br />
                             <div className="checkbox">
                                 <label>
                                     <input
@@ -156,21 +153,23 @@ class SignUp extends Component {
                                         </Link>
                                 </label>
                             </div>
-                            <button
-                                type="submit"
-                                className="btn btn-primary"
-                                onClick={this.onSubmit}
-                            >
-                                Submit
+                            <div className="text-right">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    onClick={this.onSubmit}
+                                >
+                                    Submit
                             </button>
-                            &nbsp;
+                                &nbsp;
                             <button
-                                type="button"
-                                className="btn btn-danger"
-                                onClick={this.onClick}
-                            >
-                                Back
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={this.onClick}
+                                >
+                                    Back
                             </button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -21,12 +21,7 @@ var addressSchema = new Schema({
     city: {
         type: String,
         required: true
-    },
-    // userID: {
-    //     type: Schema.Types.ObjectId,
-    //     ref:'users',
-    //     required: true
-    // }
+    }
 })
 
 var AddressModel = mongoose.model('Address', addressSchema)

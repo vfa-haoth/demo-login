@@ -14,7 +14,6 @@ const root = new GraphQLObjectType({
             resolve : function() {
                 const users = UserModel.find().exec();
                 
-                console.log(JSON.stringify(users));
                 if(!users) {
                      throw new Error('Error')
                 }
@@ -45,11 +44,7 @@ const root = new GraphQLObjectType({
             type : new GraphQLList(addressType),
             resolve : function() {
                 const addresses = AddressModel.find().exec();
-                const count = AddressModel.countDocuments().exec();
-                count.then(data => {
-                    console.log(data)
-                })
-                console.log(JSON.stringify(addresses));
+                
                 if(!addresses) {
                      throw new Error('Error')
                 }

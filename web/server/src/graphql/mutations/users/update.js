@@ -1,8 +1,7 @@
-var { GraphQLNonNull, GraphQLString, GraphQLList, GraphQLID } = require('graphql');
+var { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
 var AddressType = require('./../../types/address');
-var AddressModel = require('./../../../models/addresses');
 
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');

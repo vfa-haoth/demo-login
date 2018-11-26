@@ -24,7 +24,6 @@ class AddressList extends Component {
 
     componentWillMount() {
         var data = JSON.parse(localStorage.getItem('userData'))
-        console.log(data.addressIDs)
         if(data){
             this.setState({
                 address : data.addressIDs
@@ -32,27 +31,7 @@ class AddressList extends Component {
         }
     }
 
-    componentWillUpdate(){
-
-    }
-
-    // async getAddressData() {
-    //     var data = await this.apiCtrl.getUserData();
-    //     console.log(data)
-
-    //     if (data.success) {
-    //         console.log("Refeshed data")
-    //         console.log(data.userData[0].addressIDs)
-    //         this.setState({
-    //             address : data.userData[0].addressIDs
-    //         }) 
-    //     } else {
-    //         console.log("Get data failed")
-    //     }
-    // }
-
     render() {
-        console.log(this.props.addressList)
         if (this.props.addressList) {
             this.addressShown = this.props.addressList.map((ad, index) => {
                 return (
@@ -66,7 +45,6 @@ class AddressList extends Component {
                 )
             })
         }
-        console.log(this.addressShown)
         return (
             <div className="panel panel-default">
                 <div className="panel-heading text-center">List of addresses</div>
