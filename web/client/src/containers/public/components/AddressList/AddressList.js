@@ -14,6 +14,7 @@ class AddressList extends Component {
                 city: ''
             }]
         }
+        this.addressShown = [];
 
         this.apiCtrl = new APIControllers();
 
@@ -53,7 +54,7 @@ class AddressList extends Component {
     render() {
         console.log(this.props.addressList)
         if (this.props.addressList) {
-            this.state.address = this.props.addressList.map((ad, index) => {
+            this.addressShown = this.props.addressList.map((ad, index) => {
                 return (
                     <tr key={index}>
                         <td>{ad.code}</td>
@@ -65,7 +66,7 @@ class AddressList extends Component {
                 )
             })
         }
-        console.log(this.props.address)
+        console.log(this.addressShown)
         return (
             <div className="panel panel-default">
                 <div className="panel-heading text-center">List of addresses</div>
@@ -80,7 +81,7 @@ class AddressList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.address}
+                        {this.addressShown}
                     </tbody>
                 </table>
             </div>

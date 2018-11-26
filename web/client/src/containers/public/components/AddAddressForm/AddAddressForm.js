@@ -15,6 +15,11 @@ class AddAddressForm extends Component {
                 district: '',
                 city: ''
             }],
+            codeField: '',
+            streetField: '',
+            wardField: '',
+            districtField: '',
+            cityField: '',
             update: false
         }
         this.hasAddress = false;
@@ -36,14 +41,31 @@ class AddAddressForm extends Component {
         })
     }
 
+    splitAddressAttribute = () => {
+        // var attributeArray = this.state.addressField.split(" ");
+        // console.log(attributeArray);
+
+        this.editingAddress = {
+            code: this.state.codeField,
+            street: this.state.streetField,
+            ward: this.state.wardField,
+            district: this.state.districtField,
+            city: this.state.cityField
+        }
+        console.log(this.state)
+
+        console.log(this.editingAddress);
+    }
+
     async onSubmit(event) {
         event.preventDefault();
 
         console.log(this.isSubmit)
+        console.log(this.state.codeField)
 
         this.isSubmit = true;
 
-        this.splitAddressAttribute(this.state.addressField);
+        this.splitAddressAttribute();
         await this.createAddress();
         await this.updateAddress();
     }
@@ -85,23 +107,12 @@ class AddAddressForm extends Component {
                             city: this.editingAddress.city,
                         }]
                 })
+                var data = JSON.parse(localStorage.getItem('userData'))
+                data.addressIDs = this.state.address;
+                localStorage.setItem('userData',JSON.stringify(data))
             } else {
                 console.log("Update address failed")
             }
-        }
-    }
-
-    splitAddressAttribute = (addressField) => {
-        console.log(addressField);
-        var attributeArray = addressField.split(" ");
-        console.log(attributeArray);
-
-        this.editingAddress = {
-            code: attributeArray[0],
-            street: attributeArray[1],
-            ward: attributeArray[2],
-            district: attributeArray[3],
-            city: attributeArray[4]
         }
     }
 
@@ -144,6 +155,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="codeField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="col-xs-9 col-sm-9 col-md-9 col-lg-9">
@@ -152,6 +164,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="streetField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                 </div><br />
@@ -162,6 +175,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="wardField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -170,6 +184,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="districtField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                     <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -178,6 +193,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="cityField"
+                                            onChange={this.onChange}
                                         />
                                     </div>
                                 </div>
