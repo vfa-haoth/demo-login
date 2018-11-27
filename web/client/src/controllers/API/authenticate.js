@@ -37,7 +37,9 @@ export default class APIAuthenticateControllers {
             if (val.success) {
                 console.log("val success")
                 if (val.data.userSignin) {
-                    localStorage.setItem('userData', JSON.stringify(val.data.userSignin))
+                    var data = val.data.userSignin;
+                    data.addressIDs = []
+                    localStorage.setItem('userData', JSON.stringify(data))
                     console.log("sign in success")
                     return { success: true, data: val.data.userSignin }
                 }

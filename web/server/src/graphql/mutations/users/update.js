@@ -6,7 +6,7 @@ var AddressType = require('./../../types/address');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 
-exports.update = {
+exports.addAddress = {
     type: AddressType.addressType,
     args: {
         id: {
@@ -16,7 +16,7 @@ exports.update = {
         _id: {
             type: GraphQLID,
             required: false,
-            unique : true
+            unique: true
         },
         code: {
             type: GraphQLString,
@@ -55,6 +55,63 @@ exports.update = {
                 }
             },
             { new: true }
+        )
+    }
+}
+
+exports.updateAddressFromUser = {
+    type: AddressType.addressType,
+    args: {
+        id: {
+            name: 'id',
+            type: new GraphQLNonNull(GraphQLID)
+        },
+        _id: {
+            type: GraphQLID,
+            required: false,
+            unique: true
+        },
+        code: {
+            type: GraphQLString,
+            required: false
+        },
+        street: {
+            type: GraphQLString,
+            required: false
+        },
+        ward: {
+            type: GraphQLString,
+            required: false
+        },
+        district: {
+            type: GraphQLString,
+            required: false
+        },
+        city: {
+            type: GraphQLString,
+            required: false
+        }
+    },
+    resolve(root, params) {
+        console.log(params)
+        return UserModel.findByIdAndUpdate(
+            {
+                "_id": params.id,
+                "addressIDs._id": params._id
+            },
+            {
+                $set: {
+                    "addressIDs.$": {
+                        "_id": params._id,
+                        "code": params.code,
+                        "street": params.street,
+                        "ward": params.ward,
+                        "district": params.district,
+                        "city": params.city
+                    }
+                }
+            },
+            { new: false }
         )
     }
 }

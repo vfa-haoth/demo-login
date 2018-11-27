@@ -1,9 +1,25 @@
-var {addUser, updateAddress, userSignin} = require('./users');
-var {addAddress} = require('./addresses');
+var {
+    addUser, 
+    addAddressFromUser, 
+    userSignin, 
+    removeAddressFromUser,
+    updateAddressFromUser
+} = require('./users');
+
+var {
+    addAddress, 
+    removeAddress, 
+    updateAddress
+} = require('./addresses');
 
 module.exports = {
     addUser,
-    updateAddress,
+    addAddressFromUser,
     userSignin,
+    removeAddressFromUser,
+    updateAddressFromUser,
+
     addAddress,
+    removeAddress,
+    updateAddress
 }

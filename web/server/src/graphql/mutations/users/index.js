@@ -1,9 +1,13 @@
 var addUser = require('./add').add;
-var updateAddress = require('./update').update;
+var addAddressFromUser = require('./update').addAddress;
+var updateAddressFromUser = require('./update').updateAddressFromUser;
 var userSignin = require('./update').signin;
+var removeAddressFromUser = require('./remove').remove;
 
 module.exports = {
     addUser,
-    updateAddress,
-    userSignin
+    addAddressFromUser,
+    userSignin,
+    removeAddressFromUser,
+    updateAddressFromUser
 }

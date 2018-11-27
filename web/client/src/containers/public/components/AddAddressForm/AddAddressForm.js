@@ -15,13 +15,11 @@ class AddAddressForm extends Component {
                 district: '',
                 city: ''
             }],
-            addressField : {
-                codeField: '',
-                streetField: '',
-                wardField: '',
-                districtField: '',
-                cityField: ''
-            },
+            codeField: '',
+            streetField: '',
+            wardField: '',
+            districtField: '',
+            cityField: '',
             update: false
         }
         this.hasAddress = false;
@@ -39,17 +37,17 @@ class AddAddressForm extends Component {
         console.log(data.addressIDs)
 
         this.setState({
-            address: data.addressIDs
+            address: data.addressIDs,
         })
     }
 
     splitAddressAttribute = () => {
         this.editingAddress = {
-            code: this.state.addressField.codeField,
-            street: this.state.addressField.streetField,
-            ward: this.state.addressField.wardField,
-            district: this.state.addressField.districtField,
-            city: this.state.addressField.cityField
+            code: this.state.codeField,
+            street: this.state.streetField,
+            ward: this.state.wardField,
+            district: this.state.districtField,
+            city: this.state.cityField
         }
     }
 
@@ -87,7 +85,7 @@ class AddAddressForm extends Component {
 
     async updateAddress() {
         if (this.isSubmit) {
-            var result = await this.apiCtrl.updateAddress(this.editingAddress);
+            var result = await this.apiCtrl.addAddressFromUser(this.editingAddress);
             if (result.success) {
                 console.log("Address updated")
                 this.setState({
@@ -102,6 +100,7 @@ class AddAddressForm extends Component {
                             city: this.editingAddress.city,
                         }]
                 })
+                this.props.isAddedNewAddress(this.state.address);
             } else {
                 console.log("Update address failed")
             }
@@ -119,18 +118,6 @@ class AddAddressForm extends Component {
     }
 
     render() {
-        var localData = JSON.parse(localStorage.getItem('userData'));
-        if (localData.addressIDs.length > 0) {
-            this.hasAddress = true
-        }
-        console.log(this.state.update)
-        console.log(this.state.address)
-
-        var showAddressList = (this.hasAddress || this.state.update) ?
-            <AddressList
-                addressList={this.state.address}
-            /> : '';
-
         return (
             <div className="panel panel-primary">
                 <div className="panel-heading">
@@ -191,8 +178,6 @@ class AddAddressForm extends Component {
                                 </div>
                             </div>
                         </div>
-                        <br />
-                        {showAddressList}
                         <button
                             type="submit"
                             className="btn btn-primary"

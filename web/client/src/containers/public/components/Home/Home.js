@@ -3,6 +3,7 @@ import APIControllers from './../../../../controllers/API/index';
 import APIAuthenticateControllers from '../../../../controllers/API/authenticate';
 import AddAddressForm from '../AddAddressForm/AddAddressForm';
 import './Home.css';
+import AddressList from '../AddressList/AddressList';
 
 class Home extends Component {
 
@@ -14,18 +15,12 @@ class Home extends Component {
                 age: '',
                 tel: '',
                 email: '',
-                addressIDs: [{
-                    id: '',
-                    code: '',
-                    street: '',
-                    ward: '',
-                    district: '',
-                    city: '',
-                }]
+                addressIDs: []
             },
+            addAddress: false,
             isSignedin: false,
-            addressField: '',
-            isAddingAddress: false
+            signingIn: false,
+            openAddForm: false,
         }
 
         this.apiCtrl = new APIControllers();
@@ -36,15 +31,17 @@ class Home extends Component {
     getSigninData = async () => {
         var result = await this.apiCtrl.getUserData();
         if (result.success) {
+            console.log(result)
             this.setState({
                 isSignedin: true,
-                username: result.userData[0].username,
-                age: result.userData[0].age,
-                tel: result.userData[0].tel,
-                email: result.userData[0].email,
-                addressIDs: result.userData[0].addressIDs
+                userProfile: {
+                    username: result.userData[0].username,
+                    age: result.userData[0].age,
+                    tel: result.userData[0].tel,
+                    email: result.userData[0].email,
+                    addressIDs: result.userData[0].addressIDs
+                }
             })
-
         } else {
             this.setState({
                 isSignedin: false,
@@ -53,8 +50,10 @@ class Home extends Component {
         }
     }
 
-    componentDidMount() {
-        this.getSigninData();
+    async componentWillMount() {
+        await this.getSigninData();
+        console.log(this.state.userProfile)
+        console.log(this.state.addAddress)
     }
 
     onChange = (event) => {
@@ -80,9 +79,36 @@ class Home extends Component {
         this.apiAuthCtrl.signOut(this.props);
     }
 
+    isAddedNewAddress = (addressList) => {
+        this.setState({
+            addAddress: true,
+            userProfile: {
+                username: this.state.userProfile.username,
+                age: this.state.userProfile.age,
+                tel: this.state.userProfile.tel,
+                email: this.state.userProfile.email,
+                addressIDs: [
+                    ...this.state.userProfile.addressIDs, {
+                        id: addressList[0].id,
+                        code: addressList[0].code,
+                        street: addressList[0].street,
+                        ward: addressList[0].ward,
+                        district: addressList[0].district,
+                        city: addressList[0].city,
+                    }]
+            }
+        })
+    }
+
     toggleAddAddress = () => {
         this.setState({
-            isAddingAddress: !this.state.isAddingAddress
+            openAddForm: !this.state.openAddForm
+        })
+    }
+
+    openAddAddress = () => {
+        this.setState({
+            openAddForm: true
         })
     }
 
@@ -92,10 +118,15 @@ class Home extends Component {
             age,
             tel,
             email,
-            isAddingAddress
-        } = this.state;
+            addressIDs
+        } = this.state.userProfile;
 
-        if (!this.state.isSignedin) {
+        console.log(addressIDs)
+        console.log(this.state.addAddress)
+
+        var { openAddForm, isSignedin } = this.state;
+
+        if (!isSignedin) {
             return (
                 <div className="text-center">
                     <button
@@ -108,9 +139,6 @@ class Home extends Component {
                 </div>
             )
         } else {
-            var addingAddress = isAddingAddress ?
-                <AddAddressForm
-                /> : '';
             return (
                 <React.Fragment>
                     <div className="row text-center">
@@ -170,6 +198,15 @@ class Home extends Component {
                                                 <br />
                                             </div>
                                         </div>
+                                        <div className="row">
+                                            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <label>Address infos:</label><br />
+                                                {addressIDs.length !== 0 ?
+                                                    <AddressList
+                                                        addressList={addressIDs}
+                                                    /> : ''}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -199,7 +236,7 @@ class Home extends Component {
                             </form>
                             <br />
                             <div>
-                                {addingAddress}
+                                {openAddForm ? <AddAddressForm isAddedNewAddress={(addressList) => this.isAddedNewAddress(addressList)} /> : ''}
                             </div>
                         </div>
                     </div>

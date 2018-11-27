@@ -1,9 +1,9 @@
-var { GraphQLObjectType, GraphQLSchema } = require('graphql');
-var { queryType } = require('./queries');
+var { GraphQLObjectType, GraphQLSchema, GraphQLSchema } = require('graphql');
+var { query } = require('./queries');
 var mutation = require('./mutations');
 
 const AppSchema = new GraphQLSchema({
-    query: queryType,
+    query: query,
     mutation: new GraphQLObjectType({
         name: 'Mutation',
         fields: mutation
