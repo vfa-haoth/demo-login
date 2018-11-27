@@ -21,7 +21,8 @@ exports.remove = {
                         _id: params.addressID
                     }
                 }
-            }
+            },
+            {new : true}
         ).exec();
 
         if (!removeAddressFromUser) {

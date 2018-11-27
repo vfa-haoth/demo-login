@@ -149,7 +149,7 @@ export default class APIControllers {
         mutation{
             removeAddressFromUser(
                 _id : "${userID}"
-                addressID : "${address._id}"
+                addressID : "${address}"
             ){
                 _id
                 username
@@ -166,7 +166,7 @@ export default class APIControllers {
                 }
             },
             removeAddress(
-                _id: "${address._id}"
+                _id: "${address}"
             ){
                 _id
             }

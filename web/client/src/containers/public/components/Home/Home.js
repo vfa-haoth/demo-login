@@ -20,7 +20,7 @@ class Home extends Component {
             addAddress: false,
             isSignedin: false,
             signingIn: false,
-            openAddForm: false,
+            openAddForm: false
         }
 
         this.apiCtrl = new APIControllers();
@@ -52,7 +52,7 @@ class Home extends Component {
 
     async componentWillMount() {
         await this.getSigninData();
-        console.log(this.state.userProfile)
+        console.log(this.state.userProfile.addressIDs)
         console.log(this.state.addAddress)
     }
 
@@ -79,6 +79,18 @@ class Home extends Component {
         this.apiAuthCtrl.signOut(this.props);
     }
 
+    isDeleting = (addressList) => {
+        this.setState({
+            userProfile:{
+                username: this.state.userProfile.username,
+                age: this.state.userProfile.age,
+                tel: this.state.userProfile.tel,
+                email: this.state.userProfile.email,
+                addressIDs: addressList
+            }
+        })
+    }
+
     isAddedNewAddress = (addressList) => {
         this.setState({
             addAddress: true,
@@ -89,7 +101,7 @@ class Home extends Component {
                 email: this.state.userProfile.email,
                 addressIDs: [
                     ...this.state.userProfile.addressIDs, {
-                        id: addressList[0].id,
+                        _id: addressList[0].id,
                         code: addressList[0].code,
                         street: addressList[0].street,
                         ward: addressList[0].ward,
@@ -204,6 +216,7 @@ class Home extends Component {
                                                 {addressIDs.length !== 0 ?
                                                     <AddressList
                                                         addressList={addressIDs}
+                                                        isDeleting={() => this.isDeleting(addressIDs)}
                                                     /> : ''}
                                             </div>
                                         </div>

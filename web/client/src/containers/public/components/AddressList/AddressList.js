@@ -8,8 +8,10 @@ class AddressList extends Component {
         super(props);
         this.state = {
             address: [],
-            isDelete: false
         }
+
+        this.isDataGotten = false
+        this.isDelete = false
         this.editingAddress = {}
 
         this.apiCtrl = new APIControllers();
@@ -18,40 +20,56 @@ class AddressList extends Component {
         this.addressList = JSON.parse(localStorage.getItem('userData')).addressIDs;
     }
 
-    onDelete = (address) => {
-        this.setState({
-            isDelete: true
-        })
-        this.editingAddress = address;
+    onDelete = async (address) => {
+        console.log(typeof (address))
+        this.isDelete = true
+        
+        await this.removeAddress(address);
     }
 
-    async componentDidUpdate() {
-        if (this.state.isDelete) {
-            var userID = JSON.parse(localStorage.getItem('userData'))._id;
-            var result = await this.apiCtrl.removeAddress(this.editingAddress, userID);
+    // checkIsDataGotten = () => {
+    //     var data = await this.apiCtrl.getUserData();
+    //     console.log(data.userData[0].addressIDs)
+    //     if(data.success){
+    //         this.isDataGotten = true
+    //     }
+    // }
+
+    async removeAddress(address) {
+        console.log(address._id)
+        if (this.isDelete) {
+            var userID = JSON.parse(localStorage.getItem('userData'));
+            var result = await this.apiCtrl
+                .removeAddress(address._id, userID._id)
 
             if (result.success) {
                 console.log("Deleted address")
+                console.log(result.userData.addressIDs)
+                this.setState({
+                    address: result.userData.addressIDs
+                })
+                console.log(this.state.address)
+                this.props.isDeleting(this.state.address)
             } else {
                 console.log("Delete address failed")
             }
+        }
+    }
 
+    async componentDidUpdate() {
+        var data = await this.apiCtrl.getUserData();
+        console.log(data.userData[0].addressIDs)
+        if (data.success && this.isDataGotten !== true) {
+            this.isDataGotten = true
             this.setState({
-                isDelete : false
+                address: data.userData[0].addressIDs,
             })
         }
     }
 
-    async componentWillMount() {
-        var data = await this.apiCtrl.getUserData();
-        console.log(data.userData[0].addressIDs)
-        this.setState({
-            address: data.userData[0].addressIDs
-        })
-    }
-
     render() {
         console.log(this.props.addressList)
+        console.log(this.state.address)
         if (this.props.addressList) {
             this.state.address = this.props.addressList.map((ad, index) => {
                 return (
@@ -81,7 +99,7 @@ class AddressList extends Component {
                 )
             })
         }
-        console.log(this.props.address)
+
         return (
             <div className="panel panel-default">
                 <div className="panel-heading text-center">List of addresses</div>
