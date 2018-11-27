@@ -142,41 +142,42 @@ export default class APIControllers {
         })
     }
 
-    async removeAddress(params) {
-        console.log(params)
+    async removeAddress(address, userID) {
+        console.log(address)
+        console.log(userID)
         var app_query = gql`
-            mutation{
-                removeAddressFromUser(
-                    _id : "${params._id}"
-                    addressID : "${params.addressID}
-                ){
+        mutation{
+            removeAddressFromUser(
+                _id : "${userID}"
+                addressID : "${address._id}"
+            ){
+                _id
+                username
+                age
+                tel
+                email
+                addressIDs{
                     _id
-                    username
-                    age
-                    tel
-                    email
-                    addressIDs{
-                        _id
-                        code
-                        street
-                        ward
-                        district
-                        city
-                    }
-                },
-                removeAddress(
-                    _id: "${params.addressID}"
-                ){
-                    _id
+                    code
+                    street
+                    ward
+                    district
+                    city
                 }
+            },
+            removeAddress(
+                _id: "${address._id}"
+            ){
+                _id
             }
+        }
         `
 
         var result = this.graphQLController.mutate(app_query);
 
         return result.then((val) => {
             if (val.success) {
-                return { success: true , userData : val.data.removeAddressFromUser}
+                return { success: true, userData: val.data.removeAddressFromUser }
             } else {
                 console.log("failed")
             }

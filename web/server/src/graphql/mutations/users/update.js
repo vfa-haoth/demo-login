@@ -1,4 +1,11 @@
-var { GraphQLNonNull, GraphQLString, GraphQLID } = require('graphql');
+var {
+    GraphQLNonNull,
+    GraphQLString,
+    GraphQLID,
+    GraphQLList,
+    GraphQLObjectType,
+    GraphQLInputObjectType
+} = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
 var AddressType = require('./../../types/address');
@@ -59,17 +66,12 @@ exports.addAddress = {
     }
 }
 
-exports.updateAddressFromUser = {
-    type: AddressType.addressType,
-    args: {
-        id: {
-            name: 'id',
-            type: new GraphQLNonNull(GraphQLID)
-        },
+var inputAddress = new GraphQLInputObjectType({
+    name: 'addressInput',
+    fields: {
         _id: {
             type: GraphQLID,
-            required: false,
-            unique: true
+            required: true
         },
         code: {
             type: GraphQLString,
@@ -91,24 +93,29 @@ exports.updateAddressFromUser = {
             type: GraphQLString,
             required: false
         }
+    }
+})
+
+exports.updateAddressFromUser = {
+    type: UserType.userType,
+    args: {
+        _id: {
+            name: 'id',
+            type: new GraphQLNonNull(GraphQLID)
+        },
+        addressIDs: {
+            type: new GraphQLList(inputAddress),
+        },
     },
     resolve(root, params) {
         console.log(params)
         return UserModel.findByIdAndUpdate(
             {
-                "_id": params.id,
-                "addressIDs._id": params._id
+                _id: params._id
             },
             {
                 $set: {
-                    "addressIDs.$": {
-                        "_id": params._id,
-                        "code": params.code,
-                        "street": params.street,
-                        "ward": params.ward,
-                        "district": params.district,
-                        "city": params.city
-                    }
+                    "addressIDs": params.addressIDs
                 }
             },
             { new: false }

@@ -7,8 +7,10 @@ class AddressList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            address: []
+            address: [],
+            isDelete: false
         }
+        this.editingAddress = {}
 
         this.apiCtrl = new APIControllers();
 
@@ -16,14 +18,27 @@ class AddressList extends Component {
         this.addressList = JSON.parse(localStorage.getItem('userData')).addressIDs;
     }
 
-    onDelete = async (_id) => {
-        console.log(_id)
-        var result = await this.apiCtrl.removeAddress(_id);
+    onDelete = (address) => {
+        this.setState({
+            isDelete: true
+        })
+        this.editingAddress = address;
+    }
 
-        if (result.success) {
-            console.log("Deleted address")
-        } else {
-            console.log("Delete address failed")
+    async componentDidUpdate() {
+        if (this.state.isDelete) {
+            var userID = JSON.parse(localStorage.getItem('userData'))._id;
+            var result = await this.apiCtrl.removeAddress(this.editingAddress, userID);
+
+            if (result.success) {
+                console.log("Deleted address")
+            } else {
+                console.log("Delete address failed")
+            }
+
+            this.setState({
+                isDelete : false
+            })
         }
     }
 
@@ -57,7 +72,7 @@ class AddressList extends Component {
                                 <button
                                 type="button"
                                 className="btn btn-danger"
-                                onClick={_id => this.onDelete(ad._id)}
+                                onClick={() => this.onDelete(ad)}
                             >
                                 <i className="fas fa-times actions"></i>
                             </button>
