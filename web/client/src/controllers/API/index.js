@@ -71,14 +71,23 @@ export default class APIControllers {
             mutation {
                 addAddressFromUser (
                     id : "${params.userID}",
-                    _id : "${params.id}",
-                    code : "${params.code}",
-                    street : "${params.street}",
-                    ward : "${params.ward}",
-                    district : "${params.district}",
-                    city : "${params.city}"
+                    address : {
+                        _id : "${params.id}",
+                        code : "${params.code}",
+                        street : "${params.street}",
+                        ward : "${params.ward}",
+                        district : "${params.district}",
+                        city : "${params.city}"
+                    }
                 ) {
-                    _id
+                    addressIDs{
+                        _id
+                        code
+                        street
+                        ward
+                        district
+                        city
+                    }
                 }
             }
         `
@@ -87,7 +96,7 @@ export default class APIControllers {
 
         return result.then((val) => {
             if (val.success) {
-                return { success: true }
+                return { success: true, data: val.data.addAddressFromUser }
             } else {
                 console.log("failed")
             }
@@ -143,8 +152,6 @@ export default class APIControllers {
     }
 
     async removeAddress(address, userID) {
-        console.log(address)
-        console.log(userID)
         var app_query = gql`
         mutation{
             removeAddressFromUser(
@@ -180,6 +187,45 @@ export default class APIControllers {
                 return { success: true, userData: val.data.removeAddressFromUser }
             } else {
                 console.log("failed")
+            }
+            return { success: false }
+        })
+    }
+
+    async updateAddress(address, userID) {
+        console.log(address)
+        var app_query = gql`
+            mutation{
+                updateAddressFromUser(
+                    _id : "${userID}",
+                    addressIDs : {
+                        _id : "${address._id}",
+                        code : "${address.code}",
+                        street : "${address.street}",
+                        ward : "${address.ward}",
+                        district : "${address.district}",
+                        city : "${address.city}"
+                    }
+                ){
+                    addressIDs {
+                        _id
+                        code
+                        street
+                        ward
+                        district
+                        city
+                    }
+                }
+            }
+        `
+
+        var result = this.graphQLController.mutate(app_query);
+
+        return result.then((val) => {
+            if (val.success) {
+                return { success: true, data: val.data.updateAddressFromUser }
+            } else {
+                console.log("Update failed")
             }
             return { success: false }
         })

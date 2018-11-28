@@ -20,7 +20,8 @@ class Home extends Component {
             addAddress: false,
             isSignedin: false,
             signingIn: false,
-            openAddForm: false
+            openAddForm: false,
+            editAddress: {}
         }
 
         this.apiCtrl = new APIControllers();
@@ -31,7 +32,6 @@ class Home extends Component {
     getSigninData = async () => {
         var result = await this.apiCtrl.getUserData();
         if (result.success) {
-            console.log(result)
             this.setState({
                 isSignedin: true,
                 userProfile: {
@@ -52,8 +52,6 @@ class Home extends Component {
 
     async componentWillMount() {
         await this.getSigninData();
-        console.log(this.state.userProfile.addressIDs)
-        console.log(this.state.addAddress)
     }
 
     onChange = (event) => {
@@ -92,6 +90,7 @@ class Home extends Component {
     }
 
     isAddedNewAddress = (addressList) => {
+        console.log(addressList)
         this.setState({
             addAddress: true,
             userProfile: {
@@ -99,16 +98,31 @@ class Home extends Component {
                 age: this.state.userProfile.age,
                 tel: this.state.userProfile.tel,
                 email: this.state.userProfile.email,
-                addressIDs: [
-                    ...this.state.userProfile.addressIDs, {
-                        _id: addressList[0].id,
-                        code: addressList[0].code,
-                        street: addressList[0].street,
-                        ward: addressList[0].ward,
-                        district: addressList[0].district,
-                        city: addressList[0].city,
-                    }]
-            }
+                addressIDs: addressList
+            },
+            openAddForm : false
+        })
+    }
+
+    editingAddress = (address) => {
+        console.log(address)
+        this.openAddAddress();
+        this.setState({
+            editAddress : address
+        })
+    }
+
+    tranferEditingAddress = (addressList) => {
+        console.log(addressList)
+        this.setState({
+            userProfile: {
+                username: this.state.userProfile.username,
+                age: this.state.userProfile.age,
+                tel: this.state.userProfile.tel,
+                email: this.state.userProfile.email,
+                addressIDs: addressList
+            },
+            openAddForm : false
         })
     }
 
@@ -124,6 +138,12 @@ class Home extends Component {
         })
     }
 
+    closeAddAddress = () => {
+        this.setState({
+            openAddForm: false
+        })
+    }
+
     render() {
         var {
             username,
@@ -132,9 +152,6 @@ class Home extends Component {
             email,
             addressIDs
         } = this.state.userProfile;
-
-        console.log(addressIDs)
-        console.log(this.state.addAddress)
 
         var { openAddForm, isSignedin } = this.state;
 
@@ -168,7 +185,7 @@ class Home extends Component {
                     </div>
                     <div className="panel panel-info">
                         <div className="panel-heading">
-                            <h3 className="panel-title">{username}'s profile</h3>
+                            <h3 className="panel-title"><strong>{username}</strong>'s profile</h3>
                         </div>
                         <div className="panel-body">
                             <form onSubmit={(event) => this.onSubmit(event)}>
@@ -216,7 +233,8 @@ class Home extends Component {
                                                 {addressIDs.length !== 0 ?
                                                     <AddressList
                                                         addressList={addressIDs}
-                                                        isDeleting={() => this.isDeleting(addressIDs)}
+                                                        isDeleting={(addressList) => this.isDeleting(addressList)}
+                                                        editingAddress={(address) => this.editingAddress(address)}
                                                     /> : ''}
                                             </div>
                                         </div>
@@ -249,7 +267,12 @@ class Home extends Component {
                             </form>
                             <br />
                             <div>
-                                {openAddForm ? <AddAddressForm isAddedNewAddress={(addressList) => this.isAddedNewAddress(addressList)} /> : ''}
+                                {openAddForm ? 
+                                    <AddAddressForm 
+                                        isAddedNewAddress={(addressList) => this.isAddedNewAddress(addressList)} 
+                                        editAddress={this.state.editAddress}
+                                        tranferEditingAddress={(addressList) => this.tranferEditingAddress(addressList)}
+                                    /> : ''}
                             </div>
                         </div>
                     </div>

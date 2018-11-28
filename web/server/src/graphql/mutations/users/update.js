@@ -13,59 +13,6 @@ var AddressType = require('./../../types/address');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 
-exports.addAddress = {
-    type: AddressType.addressType,
-    args: {
-        id: {
-            name: 'id',
-            type: new GraphQLNonNull(GraphQLID)
-        },
-        _id: {
-            type: GraphQLID,
-            required: false,
-            unique: true
-        },
-        code: {
-            type: GraphQLString,
-            required: false
-        },
-        street: {
-            type: GraphQLString,
-            required: false
-        },
-        ward: {
-            type: GraphQLString,
-            required: false
-        },
-        district: {
-            type: GraphQLString,
-            required: false
-        },
-        city: {
-            type: GraphQLString,
-            required: false
-        }
-    },
-    resolve(root, params) {
-        return UserModel.findByIdAndUpdate(
-            params.id,
-            {
-                $push: {
-                    "addressIDs": {
-                        _id: params._id,
-                        code: params.code,
-                        street: params.street,
-                        ward: params.ward,
-                        district: params.district,
-                        city: params.city
-                    }
-                }
-            },
-            { new: true }
-        )
-    }
-}
-
 var inputAddress = new GraphQLInputObjectType({
     name: 'addressInput',
     fields: {
@@ -96,6 +43,30 @@ var inputAddress = new GraphQLInputObjectType({
     }
 })
 
+exports.addAddress = {
+    type: UserType.userType,
+    args: {
+        id: {
+            name: 'id',
+            type: new GraphQLNonNull(GraphQLID)
+        },
+        address : {
+            type : new GraphQLList(inputAddress)
+        }
+    },
+    resolve(root, params) {
+        return UserModel.findByIdAndUpdate(
+            { _id: params.id },
+            {
+                $push: {
+                    "addressIDs": params.address
+                }
+            },
+            { new: true }
+        )
+    }
+}
+
 exports.updateAddressFromUser = {
     type: UserType.userType,
     args: {
@@ -118,7 +89,7 @@ exports.updateAddressFromUser = {
                     "addressIDs": params.addressIDs
                 }
             },
-            { new: false }
+            { new: true }
         )
     }
 }

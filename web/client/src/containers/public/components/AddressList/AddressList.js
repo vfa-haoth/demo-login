@@ -8,70 +8,65 @@ class AddressList extends Component {
         super(props);
         this.state = {
             address: [],
+            // addingField : {
+            //     codeField : '',
+            //     streetField : '',
+            //     wardField : '',
+            //     districtField : '',
+            //     cityField : ''
+            // }
         }
 
         this.isDataGotten = false
         this.isDelete = false
+        this.isEdit = false
         this.editingAddress = {}
 
         this.apiCtrl = new APIControllers();
-
-        this.listOfAddress = [];
-        this.addressList = JSON.parse(localStorage.getItem('userData')).addressIDs;
     }
 
-    onDelete = async (address) => {
-        console.log(typeof (address))
-        this.isDelete = true
-        
-        await this.removeAddress(address);
+    async onDelete(address){
+        if (confirm('Are you sure you want to delete this product?')) { //eslint-disable-line
+            this.isDelete = true
+            
+            await this.removeAddress(address);
+        }
     }
-
-    // checkIsDataGotten = () => {
-    //     var data = await this.apiCtrl.getUserData();
-    //     console.log(data.userData[0].addressIDs)
-    //     if(data.success){
-    //         this.isDataGotten = true
-    //     }
-    // }
 
     async removeAddress(address) {
-        console.log(address._id)
         if (this.isDelete) {
             var userID = JSON.parse(localStorage.getItem('userData'));
             var result = await this.apiCtrl
                 .removeAddress(address._id, userID._id)
 
             if (result.success) {
-                console.log("Deleted address")
                 console.log(result.userData.addressIDs)
-                this.setState({
-                    address: result.userData.addressIDs
-                })
-                console.log(this.state.address)
-                this.props.isDeleting(this.state.address)
+                console.log("Deleted address")  
+                this.props.isDeleting(result.userData.addressIDs)
+
+                this.isDelete = false
             } else {
                 console.log("Delete address failed")
             }
         }
     }
 
-    async componentDidUpdate() {
-        var data = await this.apiCtrl.getUserData();
-        console.log(data.userData[0].addressIDs)
-        if (data.success && this.isDataGotten !== true) {
-            this.isDataGotten = true
-            this.setState({
-                address: data.userData[0].addressIDs,
-            })
+    async onEdit(address) {
+        this.editingAddress = {
+            _id : address._id,
+            code : address.code,
+            street : address.street,
+            ward : address.ward,
+            district : address.district,
+            city : address.city
         }
+        this.props.editingAddress(this.editingAddress)
     }
 
     render() {
         console.log(this.props.addressList)
-        console.log(this.state.address)
         if (this.props.addressList) {
-            this.state.address = this.props.addressList.map((ad, index) => {
+            var showAddress = this.props.addressList.map((ad, index) => {
                 return (
                     <tr key={index}>
                         <td className="text-center">{ad.code}</td>
@@ -83,11 +78,12 @@ class AddressList extends Component {
                             <button
                                 type="button"
                                 className="btn btn-warning"
+                                onClick={() => this.onEdit(ad)}
                             >
                                 <i className="fas fa-user-edit actions"></i>
                             </button>
                             &nbsp;
-                                <button
+                            <button
                                 type="button"
                                 className="btn btn-danger"
                                 onClick={() => this.onDelete(ad)}
@@ -115,7 +111,7 @@ class AddressList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.address}
+                        {showAddress}
                     </tbody>
                 </table>
             </div>

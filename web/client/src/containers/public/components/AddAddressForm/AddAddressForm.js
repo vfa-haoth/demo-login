@@ -24,25 +24,31 @@ class AddAddressForm extends Component {
         }
         this.hasAddress = false;
         this.isSubmit = false;
+        this.isUpdate = false;
         this.addressGot = [];
         this.editingAddress = {};
 
         this.apiCtrl = new APIControllers();
-
-        this.onSubmit = this.onSubmit.bind(this)
+        this.userID = JSON.parse(localStorage.getItem('userData'))._id;
     }
 
-    componentWillMount() {
-        var data = JSON.parse(localStorage.getItem('userData'));
-        console.log(data.addressIDs)
-
-        this.setState({
-            address: data.addressIDs,
-        })
+    componentWillMount(){
+        var editAddress = this.props.editAddress;
+        console.log(editAddress)
+        if(editAddress){
+            this.setState({
+                codeField: editAddress.code,
+                streetField: editAddress.street,
+                wardField: editAddress.ward,
+                districtField: editAddress.district,
+                cityField: editAddress.city
+            })
+        }
     }
 
-    splitAddressAttribute = () => {
+    getDataOnFields = () => {
         this.editingAddress = {
+            _id: this.props.editAddress._id,
             code: this.state.codeField,
             street: this.state.streetField,
             ward: this.state.wardField,
@@ -51,16 +57,45 @@ class AddAddressForm extends Component {
         }
     }
 
-    async onSubmit(event) {
+    onSubmit = async (event) => {
         event.preventDefault();
 
-        console.log(this.isSubmit)
+        if (this.props.editAddress._id) {
+            this.isUpdate = true;
 
-        this.isSubmit = true;
+            this.getDataOnFields();
+            console.log(this.props.editAddress)
+            await this.updateAddress(this.editingAddress);
 
-        this.splitAddressAttribute();
-        await this.createAddress();
-        await this.updateAddress();
+            this.onClear();
+        } else {
+            this.isSubmit = true;
+
+            this.getDataOnFields();
+            await this.createAddress();
+            await this.addAddressIntoUser();
+
+            this.onClear();
+        }
+    }
+
+    async updateAddress(address) {
+        console.log(address)
+        console.log(this.userID)
+        var result = await this.apiCtrl.updateAddress(address, this.userID);
+        
+        if (result.success) {
+            console.log("Update success")
+            this.isUpdate = false;
+            this.setState({
+                address: result.data.addressIDs
+            })
+            console.log(result.data.addressIDs)
+            console.log(this.state.address)
+            this.props.tranferEditingAddress(this.state.address)
+        } else {
+            console.log("Update address failed")
+        }
     }
 
     async createAddress() {
@@ -69,7 +104,7 @@ class AddAddressForm extends Component {
             if (createAddress.success) {
                 console.log("Address is created")
                 this.editingAddress = {
-                    userID: JSON.parse(localStorage.getItem('userData'))._id,
+                    userID: this.userID,
                     id: createAddress.data._id,
                     code: createAddress.data.code,
                     street: createAddress.data.street,
@@ -83,26 +118,18 @@ class AddAddressForm extends Component {
         }
     }
 
-    async updateAddress() {
+    async addAddressIntoUser() {
         if (this.isSubmit) {
             var result = await this.apiCtrl.addAddressFromUser(this.editingAddress);
             if (result.success) {
-                console.log("Address updated")
+                console.log("Address added into users")
                 this.setState({
                     update: true,
-                    address: [
-                        ...this.state.address, {
-                            id: this.editingAddress.id,
-                            code: this.editingAddress.code,
-                            street: this.editingAddress.street,
-                            ward: this.editingAddress.ward,
-                            district: this.editingAddress.district,
-                            city: this.editingAddress.city,
-                        }]
+                    address: result.data.addressIDs
                 })
                 this.props.isAddedNewAddress(this.state.address);
             } else {
-                console.log("Update address failed")
+                console.log("Add address failed")
             }
         }
     }
@@ -117,7 +144,26 @@ class AddAddressForm extends Component {
         })
     }
 
+    onClear = () => {
+        console.log("Called cleaner")
+        this.setState({
+            codeField: '',
+            streetField: '',
+            wardField: '',
+            districtField: '',
+            cityField: '',
+        })
+    }
+
     render() {
+        console.log(this.props.editAddress)
+        var {
+            codeField,
+            streetField,
+            wardField,
+            districtField,
+            cityField
+        } = this.state;
         return (
             <div className="panel panel-primary">
                 <div className="panel-heading">
@@ -134,6 +180,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="codeField"
+                                            value={codeField}
                                             onChange={this.onChange}
                                         />
                                     </div>
@@ -143,6 +190,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="streetField"
+                                            value={streetField}
                                             onChange={this.onChange}
                                         />
                                     </div>
@@ -154,6 +202,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="wardField"
+                                            value={wardField}
                                             onChange={this.onChange}
                                         />
                                     </div>
@@ -163,6 +212,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="districtField"
+                                            value={districtField}
                                             onChange={this.onChange}
                                         />
                                     </div>
@@ -172,6 +222,7 @@ class AddAddressForm extends Component {
                                             type="text"
                                             className="form-control"
                                             name="cityField"
+                                            value={cityField}
                                             onChange={this.onChange}
                                         />
                                     </div>
