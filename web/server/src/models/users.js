@@ -29,7 +29,7 @@ var userSchema = new Schema({
         {
             type: addresses.schema,
             ref : 'addresses',
-            required : true
+            required : false
         }
     ]
 })

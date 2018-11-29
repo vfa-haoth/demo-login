@@ -99,6 +99,7 @@ class AddAddressForm extends Component {
 
                 this.getDataOnFields();
                 console.log(this.props.editAddress)
+                await this.removeAddressForUpdate();
                 await this.updateAddress();
             }
         } else {
@@ -109,6 +110,21 @@ class AddAddressForm extends Component {
             await this.addAddressIntoUser();
         }
         this.onClear();
+    }
+
+    async removeAddressForUpdate() {
+        if (this.isUpdate) {
+            var result = await this.apiCtrl
+                .removeAddressForUpdate(
+                    this.editingAddress._id,
+                    this.userID);
+            
+            if(result.success){
+                console.log("Removed for update")
+            }else {
+                console.log("Remove failed")
+            }
+        }
     }
 
     async updateAddress() {

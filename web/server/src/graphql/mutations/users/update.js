@@ -84,7 +84,7 @@ exports.updateAddressFromUser = {
                 _id: params._id,
             },
             {
-                $set: {
+                $push: {
                     "addressIDs": params.addressIDs
                 }
             },

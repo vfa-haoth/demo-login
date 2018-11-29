@@ -86,6 +86,7 @@ class Home extends Component {
                 email: this.state.userProfile.email,
                 addressIDs: addressList
             },
+            openAddForm: false,
             addAddress: false
         })
     }

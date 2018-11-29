@@ -37,7 +37,7 @@ class AddressList extends Component {
         if (this.isDelete) {
             var userID = JSON.parse(localStorage.getItem('userData'));
             var result = await this.apiCtrl
-                .removeAddress(address._id, userID._id)
+                .removeCompletelyAddress(address._id, userID._id)
 
             if (result.success) {
                 console.log(result.userData.addressIDs)

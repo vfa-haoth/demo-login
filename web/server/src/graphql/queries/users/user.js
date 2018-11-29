@@ -29,7 +29,7 @@ exports.userDetail = {
     },
     resolve: function (root, { _id }) {
         const data = UserModel.find({ _id })
-            .populate('addressIDs', '_id code street ward district city')
+            .populate('addresses', '_id code street ward district city')
             .exec()
 
         if (!data) {
