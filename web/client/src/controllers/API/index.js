@@ -71,7 +71,7 @@ export default class APIControllers {
             mutation {
                 addAddressFromUser (
                     id : "${params.userID}",
-                    address : {
+                    addressIDs : {
                         _id : "${params.id}",
                         code : "${params.code}",
                         street : "${params.street}",

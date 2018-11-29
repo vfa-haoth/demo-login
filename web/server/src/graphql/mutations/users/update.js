@@ -50,8 +50,8 @@ exports.addAddress = {
             name: 'id',
             type: new GraphQLNonNull(GraphQLID)
         },
-        address : {
-            type : new GraphQLList(inputAddress)
+        addressIDs: {
+            type: inputAddress
         }
     },
     resolve(root, params) {
@@ -59,7 +59,7 @@ exports.addAddress = {
             { _id: params.id },
             {
                 $push: {
-                    "addressIDs": params.address
+                    "addressIDs": params.addressIDs
                 }
             },
             { new: true }
@@ -75,14 +75,13 @@ exports.updateAddressFromUser = {
             type: new GraphQLNonNull(GraphQLID)
         },
         addressIDs: {
-            type: new GraphQLList(inputAddress),
+            type: inputAddress,
         },
     },
     resolve(root, params) {
-        console.log(params)
         return UserModel.findByIdAndUpdate(
             {
-                _id: params._id
+                _id: params._id,
             },
             {
                 $set: {

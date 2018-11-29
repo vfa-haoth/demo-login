@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AddressList from '../AddressList/AddressList';
 import APIControllers from './../../../../controllers/API/index';
 
 class AddAddressForm extends Component {
@@ -32,10 +31,10 @@ class AddAddressForm extends Component {
         this.userID = JSON.parse(localStorage.getItem('userData'))._id;
     }
 
-    componentWillMount(){
+    componentDidMount() {
         var editAddress = this.props.editAddress;
         console.log(editAddress)
-        if(editAddress){
+        if (editAddress !== null) {
             this.setState({
                 codeField: editAddress.code,
                 streetField: editAddress.street,
@@ -46,55 +45,86 @@ class AddAddressForm extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps && nextProps.editAddress) {
+            var { editAddress } = nextProps;
+            this.setState({
+                codeField: editAddress.code,
+                streetField: editAddress.street,
+                wardField: editAddress.ward,
+                districtField: editAddress.district,
+                cityField: editAddress.city,
+            })
+        } else {
+            this.setState({
+                codeField: '',
+                streetField: '',
+                wardField: '',
+                districtField: '',
+                cityField: '',
+                update: false
+            })
+        }
+    }
+
     getDataOnFields = () => {
-        this.editingAddress = {
-            _id: this.props.editAddress._id,
-            code: this.state.codeField,
-            street: this.state.streetField,
-            ward: this.state.wardField,
-            district: this.state.districtField,
-            city: this.state.cityField
+        var hasID = this.props.editAddress ? this.props.editAddress._id : '';
+
+        if (hasID) {
+            this.editingAddress = {
+                _id: this.props.editAddress._id,
+                code: this.state.codeField,
+                street: this.state.streetField,
+                ward: this.state.wardField,
+                district: this.state.districtField,
+                city: this.state.cityField
+            }
+        } else {
+            this.editingAddress = {
+                code: this.state.codeField,
+                street: this.state.streetField,
+                ward: this.state.wardField,
+                district: this.state.districtField,
+                city: this.state.cityField
+            }
         }
     }
 
     onSubmit = async (event) => {
         event.preventDefault();
 
-        if (this.props.editAddress._id) {
-            this.isUpdate = true;
+        if (this.props.editAddress) {
+            if (this.props.editAddress._id) {
+                this.isUpdate = true;
 
-            this.getDataOnFields();
-            console.log(this.props.editAddress)
-            await this.updateAddress(this.editingAddress);
-
-            this.onClear();
+                this.getDataOnFields();
+                console.log(this.props.editAddress)
+                await this.updateAddress();
+            }
         } else {
             this.isSubmit = true;
 
             this.getDataOnFields();
             await this.createAddress();
             await this.addAddressIntoUser();
-
-            this.onClear();
         }
+        this.onClear();
     }
 
-    async updateAddress(address) {
-        console.log(address)
-        console.log(this.userID)
-        var result = await this.apiCtrl.updateAddress(address, this.userID);
-        
-        if (result.success) {
-            console.log("Update success")
-            this.isUpdate = false;
-            this.setState({
-                address: result.data.addressIDs
-            })
-            console.log(result.data.addressIDs)
-            console.log(this.state.address)
-            this.props.tranferEditingAddress(this.state.address)
-        } else {
-            console.log("Update address failed")
+    async updateAddress() {
+        if (this.isUpdate) {
+            var result = await this.apiCtrl.updateAddress(this.editingAddress, this.userID);
+
+            if (result.success) {
+                console.log("Update success")
+                this.isUpdate = false;
+                this.setState({
+                    address: result.data.addressIDs
+                })
+                this.props.transferEditingAddress(this.state.address)
+            } else {
+                console.log("Update address failed")
+            }
         }
     }
 
@@ -234,8 +264,8 @@ class AddAddressForm extends Component {
                             className="btn btn-primary"
                             onClick={this.onSubmit}
                         >
-                            Add
-                    </button>
+                            {this.props.status}
+                        </button>
                     </form>
                 </div>
             </div>

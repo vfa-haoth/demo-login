@@ -7,7 +7,9 @@ var userType = require('./../../types/user').userType;
 exports.users = {
     type: new GraphQLList(userType),
     resolve: function () {
-        const users = UserModel.find().exec();
+        const users = UserModel.find()
+        .populate('addressIDs', '_id code street ward district city')
+        .exec();
 
         if (!users) {
             throw new Error('Error')
@@ -27,7 +29,7 @@ exports.userDetail = {
     },
     resolve: function (root, { _id }) {
         const data = UserModel.find({ _id })
-            .populate('addressIDs', '_id code street ward district city userID')
+            .populate('addressIDs', '_id code street ward district city')
             .exec()
 
         if (!data) {

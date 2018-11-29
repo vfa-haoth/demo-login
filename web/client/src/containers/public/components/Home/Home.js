@@ -79,13 +79,14 @@ class Home extends Component {
 
     isDeleting = (addressList) => {
         this.setState({
-            userProfile:{
+            userProfile: {
                 username: this.state.userProfile.username,
                 age: this.state.userProfile.age,
                 tel: this.state.userProfile.tel,
                 email: this.state.userProfile.email,
                 addressIDs: addressList
-            }
+            },
+            addAddress: false
         })
     }
 
@@ -100,7 +101,6 @@ class Home extends Component {
                 email: this.state.userProfile.email,
                 addressIDs: addressList
             },
-            openAddForm : false
         })
     }
 
@@ -108,11 +108,12 @@ class Home extends Component {
         console.log(address)
         this.openAddAddress();
         this.setState({
-            editAddress : address
+            editAddress: address,
+            addAddress: false,
         })
     }
 
-    tranferEditingAddress = (addressList) => {
+    transferEditingAddress = (addressList) => {
         console.log(addressList)
         this.setState({
             userProfile: {
@@ -122,14 +123,24 @@ class Home extends Component {
                 email: this.state.userProfile.email,
                 addressIDs: addressList
             },
-            openAddForm : false
+            addAddress: false
         })
     }
 
     toggleAddAddress = () => {
-        this.setState({
-            openAddForm: !this.state.openAddForm
-        })
+        if (this.state.openAddForm && this.state.editAddress !== null) {
+            this.setState({
+                openAddForm: true,
+                addAddress: true,
+                editAddress: null
+            })
+        }else{
+            this.setState({
+                openAddForm: !this.state.openAddForm,
+                addAddress: true,
+                editAddress: null
+            })
+        }
     }
 
     openAddAddress = () => {
@@ -154,6 +165,8 @@ class Home extends Component {
         } = this.state.userProfile;
 
         var { openAddForm, isSignedin } = this.state;
+
+        var status = this.state.addAddress ? 'Add' : 'Save'
 
         if (!isSignedin) {
             return (
@@ -267,11 +280,12 @@ class Home extends Component {
                             </form>
                             <br />
                             <div>
-                                {openAddForm ? 
-                                    <AddAddressForm 
-                                        isAddedNewAddress={(addressList) => this.isAddedNewAddress(addressList)} 
+                                {openAddForm ?
+                                    <AddAddressForm
+                                        isAddedNewAddress={(addressList) => this.isAddedNewAddress(addressList)}
                                         editAddress={this.state.editAddress}
-                                        tranferEditingAddress={(addressList) => this.tranferEditingAddress(addressList)}
+                                        transferEditingAddress={(addressList) => this.transferEditingAddress(addressList)}
+                                        status={status}
                                     /> : ''}
                             </div>
                         </div>

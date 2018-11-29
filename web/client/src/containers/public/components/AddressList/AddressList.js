@@ -26,7 +26,7 @@ class AddressList extends Component {
     }
 
     async onDelete(address){
-        if (confirm('Are you sure you want to delete this product?')) { //eslint-disable-line
+        if (confirm('Are you sure you want to delete this address?')) { //eslint-disable-line
             this.isDelete = true
             
             await this.removeAddress(address);

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import APIAuthenticateControllers from './../../../../controllers/API/authenticate';
 import BaseControllers from '../../../../controllers/Base';
-import Home from '../Home/Home';
 
 class SignIn extends Component {
 

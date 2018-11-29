@@ -43,7 +43,7 @@ exports.update = {
                     "city": params.city
                 }
             },
-            { new: false }
+            { new: true }
         )
     }
 }
