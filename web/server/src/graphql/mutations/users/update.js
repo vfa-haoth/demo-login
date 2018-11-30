@@ -9,6 +9,7 @@ var {
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
 var AddressType = require('./../../types/address');
+var AddressModel = require('./../../../models/addresses');
 
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
@@ -18,7 +19,7 @@ var inputAddress = new GraphQLInputObjectType({
     fields: {
         _id: {
             type: GraphQLID,
-            required: true
+            required: false
         },
         code: {
             type: GraphQLString,
@@ -79,17 +80,34 @@ exports.updateAddressFromUser = {
         },
     },
     resolve(root, params) {
-        return UserModel.findByIdAndUpdate(
+        console.log(params)
+        var model = AddressModel.findByIdAndUpdate(
+            { _id: params.addressIDs._id },
             {
-                _id: params._id,
-            },
-            {
-                $push: {
-                    "addressIDs": params.addressIDs
+                $set: {
+                    code: params.addressIDs.code,
+                    street: params.addressIDs.street,
+                    ward: params.addressIDs.ward,
+                    district: params.addressIDs.district,
+                    city: params.addressIDs.city,
                 }
             },
             { new: true }
-        )
+        ).then(res => {
+            return UserModel.findOneAndUpdate(
+                {
+                    "addressIDs._id": params.addressIDs._id
+                },
+                {
+                    $set: {
+                        "addressIDs.$": params.addressIDs
+                    }
+                },
+                { new: true }
+            ).exec();
+        })
+
+        return model
     }
 }
 

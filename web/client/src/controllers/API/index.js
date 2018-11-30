@@ -72,7 +72,7 @@ export default class APIControllers {
                 addAddressFromUser (
                     id : "${params.userID}",
                     addressIDs : {
-                        _id : "${params.id}",
+                        _id: "${params.id}",
                         code : "${params.code}",
                         street : "${params.street}",
                         ward : "${params.ward}",
@@ -259,6 +259,7 @@ export default class APIControllers {
 
         return result.then((val) => {
             if (val.success) {
+                console.log(val)
                 return { success: true, data: val.data.updateAddressFromUser }
             } else {
                 console.log("Update failed")

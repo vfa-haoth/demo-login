@@ -268,7 +268,7 @@ class Home extends Component {
                                         className="btn btn-primary"
                                         onClick={this.toggleAddAddress}
                                     >
-                                        Add address
+                                        Manage address form
                                     </button>
                                     <button
                                         type="button"

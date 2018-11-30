@@ -99,7 +99,7 @@ class AddAddressForm extends Component {
 
                 this.getDataOnFields();
                 console.log(this.props.editAddress)
-                await this.removeAddressForUpdate();
+                // await this.removeAddressForUpdate();
                 await this.updateAddress();
             }
         } else {
@@ -112,26 +112,27 @@ class AddAddressForm extends Component {
         this.onClear();
     }
 
-    async removeAddressForUpdate() {
-        if (this.isUpdate) {
-            var result = await this.apiCtrl
-                .removeAddressForUpdate(
-                    this.editingAddress._id,
-                    this.userID);
+    // async removeAddressForUpdate() {
+    //     if (this.isUpdate) {
+    //         var result = await this.apiCtrl
+    //             .removeAddressForUpdate(
+    //                 this.editingAddress._id,
+    //                 this.userID);
             
-            if(result.success){
-                console.log("Removed for update")
-            }else {
-                console.log("Remove failed")
-            }
-        }
-    }
+    //         if(result.success){
+    //             console.log("Removed for update")
+    //         }else {
+    //             console.log("Remove failed")
+    //         }
+    //     }
+    // }
 
     async updateAddress() {
         if (this.isUpdate) {
             var result = await this.apiCtrl.updateAddress(this.editingAddress, this.userID);
 
             if (result.success) {
+                console.log(result.data)
                 console.log("Update success")
                 this.isUpdate = false;
                 this.setState({
@@ -166,6 +167,7 @@ class AddAddressForm extends Component {
 
     async addAddressIntoUser() {
         if (this.isSubmit) {
+            console.log(this.editingAddress)
             var result = await this.apiCtrl.addAddressFromUser(this.editingAddress);
             if (result.success) {
                 console.log("Address added into users")
@@ -213,7 +215,7 @@ class AddAddressForm extends Component {
         return (
             <div className="panel panel-primary">
                 <div className="panel-heading">
-                    <h3 className="panel-title">Add address</h3>
+                    <h3 className="panel-title">{this.props.status==='Add' ? 'Add new address' : 'Edit address'}</h3>
                 </div>
                 <div className="panel-body">
                     <form onSubmit={this.onSubmit}>
