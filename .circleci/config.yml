@@ -12,11 +12,11 @@ jobs:
     steps:
       - checkout
 
-
       - run: cd ./web/client 
 
       - restore_cache:
           keys:
+          - node-v1-{{ .Branch }}-{{ .Revision }}
           - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
           - node-v1-{{ .Branch }}-
           - node-v1-
