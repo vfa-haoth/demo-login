@@ -4,6 +4,11 @@ jobs:
     docker:
       - image: circleci/node:8
 
+    filters:
+      branches:
+        only:
+          - Beauty
+
     steps:
       - checkout
 
