@@ -16,14 +16,13 @@ jobs:
 
       - restore_cache:
           keys:
-          - node-v1-{{ .Branch }}-{{ .Revision }}
-          - node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          - node-v1-{{ .Branch }}-
-          - node-v1-
+          # - node-v1-{{ .Branch }}-{{ .Revision }}
+          - v1-npm-deps-{{ checksum "package-lock.json" }}
+          - v1-npm-deps-
 
       - run: npm install
 
       - save_cache:
           paths:
             - node_modules
-          key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: v1-npm-deps-{{ checksum "package-lock.json" }}
