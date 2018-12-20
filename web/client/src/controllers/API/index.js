@@ -171,11 +171,6 @@ export default class APIControllers {
                     district
                     city
                 }
-            },
-            removeAddress(
-                _id: "${address}"
-            ){
-                _id
             }
         }
         `

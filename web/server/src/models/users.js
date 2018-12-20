@@ -40,7 +40,7 @@ userSchema.pre('save', function(next) {
     if(!user.isModified('password')) {
         return next();
     }
-
+    
     bcrypt.genSalt(10, function(error, salt) {
         if (error) {
             return next(error);

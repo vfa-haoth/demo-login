@@ -1,6 +1,7 @@
 var { GraphQLNonNull, GraphQLID } = require('graphql');
 var UserType = require('./../../types/user');
 var UserModel = require('./../../../models/users');
+var AddressModel = require('./../../../models/addresses');
 
 exports.remove = {
     type: UserType.userType,
@@ -23,7 +24,9 @@ exports.remove = {
                 }
             },
             {new : true}
-        ).exec();
+        ).then(
+            AddressModel.findByIdAndDelete(params.addressID).exec()
+        );
 
         if (!removeAddressFromUser) {
             throw new Error('Error from user')
